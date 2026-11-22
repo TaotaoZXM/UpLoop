@@ -1,0 +1,54 @@
+/* UpLoop 主题（2026-11-21）
+ * 与荧光绿 App 图标同源：荧光绿作主色，文字用图标里的深墨绿。
+ * 放在所有样式表最后加载；抽卡页 draw.css 已改为直接使用本主题变量，与其余页面一致。
+ */
+:root {
+  --canvas: #ffffff;
+  --surface: #ffffff;
+  --surface-subtle: #fcfdf8;
+  --selected: #e8fba8;
+
+  --line: #e3ebd1;
+  --line-soft: #f1f6e6;
+  --line-strong: #d3e2b4;
+  --line-active: #b9d770;
+
+  --text: #1e2a12;
+  --text-2: #344424;
+  --text-3: #4c5e36;
+  --muted: #79886a;
+  --disabled: #aebaa0;
+
+  --primary: #cbf53a;
+  --on-primary: #1b2809;
+  --accent: #cbf53a;
+  --accent-text: #2e4310;
+  --accent-soft: #e8fba8;
+  --accent-line: #c7ec63;
+  --focus: #87ab20;
+
+  --danger: #c04436;
+  --danger-text: #ab362a;
+  --danger-soft: #fcfeeb;
+
+  --shadow: 0 3px 12px rgba(46, 67, 16, .06);
+  --ring-soft: 0 0 0 4px rgba(203, 245, 58, .34);
+}
+
+/* 进度条使用亮面荧光绿，和图标/按钮同一条视觉线 */
+.task-routine-progress progress::-webkit-progress-value,
+.task-water-progress progress::-webkit-progress-value {
+  background: var(--primary);
+}
+.task-routine-progress progress::-moz-progress-bar,
+.task-water-progress progress::-moz-progress-bar {
+  background: var(--primary);
+}
+
+/* 语音页主按钮的阴影改为同色系 */
+.assistant .as-primary {
+  box-shadow: 0 6px 16px rgba(150, 190, 20, .22);
+}
+.assistant .as-primary:hover {
+  background: #b9e523;
+}

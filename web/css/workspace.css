@@ -1,0 +1,162 @@
+/* Task's quiet workspace: the map carries the visual identity. */
+.phone .screen { padding-bottom: 120px; }
+.phone .task-property-trigger[hidden] { display:none!important; }
+.ws-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.ws-heading h1, #wsManage h1 { font-size:28px; letter-spacing:-1px; line-height:1.2; font-weight:600; margin:0; }
+.ws-heading p { color:#737373; font-size:13px; margin:10px 0 0; }
+.ws-counts { font-size:12px; color:#737373; margin:20px 0; }
+.ws-light-button { border:1px solid #dedede; background:#fafafa; color:#262626; border-radius:12px; padding:10px 14px; min-height:42px; font:inherit; font-size:13px; cursor:pointer; }
+.ws-light-button:hover { background:#f0f0f0; }
+.ws-filter-row { display:grid; grid-template-columns:minmax(90px,1fr) minmax(82px,110px) auto; align-items:center; gap:6px; margin-bottom:10px; }
+.ws-filter-row input,.ws-filter-row select,.ws-detail select { min-width:0; width:100%; min-height:38px; border:1px solid #e5e5e5; border-radius:10px; background:#fff; padding:7px 9px; font:inherit; font-size:12px; color:#525252; }
+.ws-show-done { display:flex; align-items:center; justify-content:center; gap:4px; margin:0; white-space:nowrap; font-size:11px; color:#737373; }
+.ws-show-done input { accent-color:#525252; width:15px; height:15px; }
+#wsRoutineStatus { font-size:12px; color:#737373; }
+#wsRoutineStatus button { background:transparent; border:0; text-decoration:underline; padding:6px; cursor:pointer; }
+.ws-muted { color:#737373; font-size:11px; line-height:1.6; margin:12px 3px; }
+.ws-detail { position:relative; margin-top:20px; padding:20px; border:1px solid #dedede; border-radius:20px; background:#fafafa; }
+.ws-detail[hidden] { display:none; }
+.ws-detail-head { display:flex; justify-content:space-between; align-items:center; color:#737373; font-size:12px; }
+.ws-detail-head button,.ws-links button { min-width:36px; min-height:36px; background:transparent; border:0; font-size:22px; color:#737373; cursor:pointer; }
+.ws-detail h2 { font-size:19px; line-height:1.6; margin:8px 0; overflow-wrap:anywhere; }
+.ws-detail h3 { margin:24px 0 8px; font-size:14px; font-weight:550; }
+.ws-detail > p { font-size:12px; color:#737373; margin:0 0 16px; }
+.ws-detail > button { margin:0 6px 8px 0; }
+.ws-links > div { display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:12px; line-height:1.6; border-bottom:1px solid #e5e5e5; }
+#wsLinkForm { display:grid; gap:12px; margin-top:16px; }
+#wsLinkForm label { display:grid; gap:6px; font-size:12px; color:#737373; }
+#wsLinkStatus { font-size:12px; color:#737373; margin:0; }
+.ws-empty { padding:55px 12px; text-align:center; }
+.ws-empty h2 { font-size:22px; font-weight:550; line-height:1.5; }
+.ws-empty p { color:#737373; font-size:13px; line-height:1.8; margin:14px 0 22px; }
+#wsManage { margin:0 0 20px; }
+.ws-manage-tabs { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); margin-top:22px; gap:6px; padding:4px; background:#f5f5f5; border-radius:13px; }
+.ws-manage-tabs button { min-width:0; min-height:42px; padding:8px 4px; border:1px solid transparent; border-radius:10px; background:transparent; font:inherit; font-size:13px; color:#737373; cursor:pointer; }
+.ws-manage-tabs button[aria-current=page] { background:#fff; color:#262626; border-color:#dedede; box-shadow:0 1px 3px #00000008; }
+#todoScreen:has(#wsManage) > .work-head h1,#doneScreen:has(#wsManage) > .work-head h1 { font-size:19px; }
+#ideaScreen:has(#wsManage) > .work-head,#routineScreen:has(#wsManage) > .work-head,#routineBack { display:none; }
+.ws-highlight { background:#f0f0f0!important; border-radius:10px; }
+.task-scenario-choice { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }
+.task-scenario-choice button { min-height:40px; border:1px solid #e5e5e5; border-radius:10px; background:#fff; color:#525252; font:inherit; font-size:13px; }
+.task-scenario-choice button.active { background:#eeeeee; border-color:#a3a3a3; color:#262626; }
+.task-entry-form .priority-choice { grid-template-columns:repeat(4,minmax(0,1fr))!important; gap:6px; }
+.priority-choice .choice { min-width:0; padding:9px 3px; font-size:12px; white-space:nowrap; }
+.task-repeat-toggle { display:flex; align-items:center; gap:8px; min-height:38px; font-size:13px; }
+.task-repeat-toggle input { width:16px; height:16px; accent-color:#444; }
+.task-loop-state { position:absolute; width:1px!important; height:1px!important; opacity:0; pointer-events:none; }
+#todoSheet .scenario-choice,#todoSheet .loop-choice { grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px; }
+#todoSheet .scenario-choice .choice,#todoSheet .loop-choice .choice { display:flex; align-items:center; gap:8px; min-height:38px; padding:7px 8px; border:0; border-radius:0; background:transparent; color:var(--text-2); text-align:left; }
+#todoSheet .scenario-choice .choice::before,#todoSheet .loop-choice .choice::before { content:''; width:16px; height:16px; flex:none; border:1px solid var(--line-strong); border-radius:50%; background:var(--surface); }
+#todoSheet .scenario-choice .choice.active::before,#todoSheet .loop-choice .choice.active::before { border:5px solid var(--primary); background:var(--surface); }
+#todoSheet .scenario-choice .choice.active,#todoSheet .loop-choice .choice.active { color:var(--text); background:transparent; border-color:transparent; }
+.task-repeat-days { display:grid; grid-template-columns:1fr auto; align-items:center; gap:12px; font-size:12px; }
+.task-repeat-days input { width:76px; min-height:38px; padding:6px 8px; border:1px solid #dedede; border-radius:8px; background:#fff; color:#262626; font:inherit; }
+.ws-day-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:20px 0; }
+.ws-day-stats > div { padding:14px 8px; border-radius:14px; background:#f7f7f7; font-size:11px; color:#737373; }
+.ws-day-stats strong { display:block; font-size:25px; color:#262626; font-weight:550; margin-bottom:5px; }
+.ws-routine-summary { padding:15px 0; border-bottom:1px solid #eee; font-size:13px; }
+.ws-routine-summary small { display:block; margin-top:5px; color:#737373; font-size:11px; }
+.phone .task-dock-pill { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.phone .decompose-preview { max-height:48vh; margin-top:12px; overflow:auto; border-top:1px solid var(--line-soft); }
+
+/* Keep the first records above the fold; the dock already names each page. */
+.phone .screen.work { padding-top:14px; }
+#wsManage { margin-bottom:10px; }
+#wsManage > h1 { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.ws-manage-tabs { margin-top:0; gap:3px; padding:3px; }
+.ws-manage-tabs button { min-height:40px; }
+.phone #todoScreen:has(#wsManage) > .work-head,
+.phone #doneScreen:has(#wsManage) > .work-head { min-height:36px; justify-content:flex-end; }
+.phone #todoScreen:has(#wsManage) > .work-head > div,
+.phone #doneScreen:has(#wsManage) > .work-head > div { display:none; }
+.phone #todoScreen:has(#wsManage) > .work-head .add,
+.phone #doneScreen:has(#wsManage) > .work-head .add { min-height:36px; padding:7px 11px; font-size:12px; }
+.phone .task-date-picker { margin:8px 0 12px; }
+.phone .task-date-heading { min-height:32px; margin-bottom:3px; }
+.phone .task-month-entry { min-height:32px; font-size:13px; }
+.phone .task-week-days button { min-height:44px; flex-direction:column; gap:2px; padding:4px 0 8px; border-radius:10px; }
+.phone .task-week-days button > span { font-size:10px; }
+.phone .task-week-days button > strong { font-size:14px; }
+.phone .task-week-nav > button { height:44px; }
+.phone .task-week-days button.is-today::after { bottom:4px; }
+.phone .task-task-date-note, .phone .done-intro,
+#routineScreen > .module-lead, #ideaScreen .ideas-intro { display:none; }
+.phone .filters { margin-top:8px; }
+.phone #todoGroups { margin-top:12px; }
+.phone #ideaScreen .ideas { margin-top:12px; }
+.phone #routineScreen #taskRoutine { margin-top:10px; }
+.ws-heading { align-items:center; }
+.ws-heading h1,.phone #todayScreen .work-head h1 { font-size:22px; }
+.ws-heading p,#todayScreen .cal-header > p,#todayScreen #calSelectedSubtitle { display:none; }
+.ws-counts { margin:8px 0 12px; font-size:11px; }
+.ws-heading .ws-light-button { min-height:36px; padding:7px 11px; }
+.ws-controls { margin-bottom:8px; }
+.ws-view-switch { padding:3px; }
+.ws-view-switch button { padding:7px 14px; }
+.ws-filter-row input,.ws-filter-row select { min-height:36px; padding:7px 9px; }
+.ws-show-done { margin:8px 0; }
+.phone #todayScreen .cal-selected { margin-top:10px; }
+.phone #todayScreen .cal-selected h2 { font-size:16px; }
+.ws-day-stats { margin:10px 0; }
+.ws-day-stats > div { padding:10px 8px; }
+.ws-day-stats strong { font-size:22px; margin-bottom:3px; }
+
+#wsContent { position:relative; }
+.task-repeat-days.hidden { display:none; }
+.phone .form label.task-repeat-toggle { display:flex; flex-direction:row; align-items:center; gap:8px; }
+.phone .form .task-repeat-toggle input { flex:0 0 16px; width:16px; height:16px; min-height:16px; padding:0; }
+.phone .form label.task-repeat-days { display:grid; grid-template-columns:minmax(0,1fr) 76px; align-items:center; }
+.phone .form label.task-repeat-days.hidden { display:none; }
+.phone .form .task-repeat-days input { width:76px; padding:7px 8px; }
+/* Full priority labels fit one row at phone width without abbreviations. */
+.phone .task-entry-form .priority-choice { gap:3px; }
+.phone .task-entry-form .priority-choice .choice { padding:9px 1px; font-size:11px; letter-spacing:-.4px; min-height:38px; }
+.manage-date-group { margin:18px 0 0; }
+.manage-date-title,.phone .manage-date-title { display:flex; justify-content:space-between; align-items:center; gap:8px; margin:0; padding:10px 0; border-bottom:1px solid #e9e9e9; color:#525252; font-size:12px; font-weight:500; }
+.manage-date-title small { color:#a3a3a3; font-size:11px; font-weight:400; }
+#doneHistoryLink { display:none; }
+#todoSettled { display:none; }
+.manage-history-entry { padding:12px 0; border-bottom:1px solid #eee; }
+.manage-history-entry strong { display:block; font-size:13px; font-weight:500; }
+.manage-history-entry small { display:block; margin-top:4px; color:#737373; font-size:11px; }
+.manage-history-more { display:block; width:100%; margin:14px 0; padding:12px; border:1px solid #e5e5e5; border-radius:10px; background:#fafafa; color:#737373; font:inherit; font-size:12px; }
+
+#doneList .manage-date-group:not(:has(.done-row:not(.hidden))), #ideaList .manage-date-group:not(:has(.idea-row:not(.hidden))) { display:none; }
+.manage-history-more:hover { background:#f0f0f0; }
+.manage-history-more:active { transform:translateY(1px); }
+.manage-history-more[hidden] { display:none; }
+.task-property-toolbar { display:flex; align-items:center; flex-wrap:wrap; gap:7px; margin:0 0 2px; }
+.phone .task-property-trigger { display:inline-flex; align-items:center; gap:6px; max-width:100%; min-height:38px; padding:8px 11px; border:1px solid #e2e2e2; border-radius:999px; background:#fff; color:#525252; font:inherit; font-size:12px; cursor:pointer; }
+.task-property-trigger svg { width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+.task-property-trigger span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.phone .task-property-trigger:hover,.phone .task-property-trigger[aria-expanded=true] { background:#f5f5f5; border-color:#bfbfbf; }
+.phone .task-property-trigger:active { transform:translateY(1px); }
+.phone .task-property-popover { position:fixed; inset:auto; margin:0; padding:10px; max-height:min(420px,calc(100dvh - 32px)); overflow:auto; border:1px solid #ddd; border-radius:18px; color:#262626; background:#fcfcfc; box-shadow:0 12px 40px #0000001f; }
+.task-property-popover::backdrop { background:transparent; }
+.phone .task-property-popover > span { display:block; padding:5px 9px 9px; color:#8a8a8a; font-size:11px; }
+.phone .task-entry-form .task-property-popover .choices,.phone .task-property-popover .project-list { display:grid; grid-template-columns:minmax(0,1fr)!important; gap:2px; }
+.phone .task-entry-form .task-property-popover .choice,.phone .task-property-popover .project { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; min-height:46px; margin:0; padding:12px 11px; border:0; border-radius:9px; background:transparent; color:#404040; font:inherit; font-size:14px; letter-spacing:0; text-align:left; white-space:normal; }
+.phone .task-property-popover .choice:hover,.phone .task-property-popover .project:hover { background:#f0f0f0; }
+.phone .task-property-popover .choice.active,.phone .task-property-popover .project.active { background:#ededed; color:#262626; }
+.task-property-popover .choice.active::after,.task-property-popover .project.active::after { content:'✓'; color:#737373; font-size:16px; }
+.phone .task-property-popover .project-search { padding:10px; margin-bottom:5px; font-size:14px; }
+.task-property-popover .new-project-field { padding:4px 8px 8px; }
+.task-property-trigger:focus-visible,.task-property-popover button:focus-visible { outline:2px solid #888; outline-offset:2px; }
+.phone .task-property-popover .hidden { display:none; }
+
+.task-property-popover:not(:popover-open) { display:none!important; }
+.task-add-actions { display:grid; grid-template-columns:minmax(70px,.65fr) minmax(0,1.35fr); gap:8px; }
+.phone .task-add-actions .sheet-submit { min-width:0; font-size:13px; }
+#linkedTaskPlans { margin-bottom:20px; }#linkedTaskPlans[hidden] { display:none; }
+/* Task cards and quiet sequential checklist rows. */
+.phone #todoGroups .task-row.swipe-item,.phone #doneList .done-row.swipe-item { margin:10px 0; padding:0; border:1px solid #e5e5e5; border-radius:16px; background:#fff; min-height:0; }
+.phone #todoGroups .task-row .swipe-content,.phone #doneList .done-row .swipe-content { display:flex; align-items:center; gap:12px; padding:17px 15px; min-height:78px; border-radius:15px; }
+.phone #todoGroups .task-title { font-size:15px; font-weight:500; line-height:1.55; }
+.phone #todoGroups .check { flex:none; width:24px; height:28px; font-size:24px; color:#a3a3a3; }
+.phone #todoGroups .task-row { transition:border-color .15s ease,box-shadow .15s ease; }
+@media(hover:hover) { .phone #todoGroups .task-row:hover { border-color:#c9c9c9; box-shadow:0 3px 10px #00000005; } }
+.task-add-actions [hidden] { display:none!important; }
+@media(prefers-reduced-motion:reduce) { .phone #todoGroups .task-row { transition:none; } }
+
+/* My Tasks: the tab bar replaces the type chips on the timeline */
+#allScreen #wsChips{display:none}

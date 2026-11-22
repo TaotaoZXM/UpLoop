@@ -1,0 +1,156 @@
+/* Sub-page navigation for Wellness (four cards as tabs) and Expense
+   (收支记录 / 收支分类). Colors follow the global light monochrome theme. */
+
+/* ---------- Greeting doubles as the light-start trigger ---------- */
+.screen.start .greeting { cursor: pointer; transition: opacity .16s ease; }
+.screen.start .greeting:hover { opacity: .82; }
+.screen.start .greeting:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px; }
+
+/* ---------- Wellness: cards become the four sub-page tabs ---------- */
+#taskHealth .og-cards .og-card[data-kind] {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+#taskHealth .og-card[data-kind]:hover { transform: translateY(-2px); border-color: #3f3f3f; }
+#taskHealth .og-card[data-kind].active {
+  border-color: #e5e5e5;
+  box-shadow: 0 0 0 1px rgba(229, 229, 229, .35), 0 0 18px rgba(229, 229, 229, .08);
+}
+#taskHealth .og-card[data-kind].active .og-card-label { color: #e5e5e5; }
+#taskHealth .og-card[data-kind]:focus-visible { outline: 2px solid #e5e5e5; outline-offset: 2px; }
+#taskHealth .og-card[data-kind] .og-card-label { display: block; }
+
+/* ---------- Expense: two sub-page tabs ---------- */
+.task-subtabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  margin: 2px 0 14px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+.task-subtabs button {
+  min-width: 0;
+  padding: 9px 4px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .16s ease, color .16s ease;
+}
+.task-subtabs button:hover { background: var(--soft); }
+.task-subtabs button.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 3px 9px rgba(104, 104, 104, .22);
+}
+.task-subtabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- 收入 / 收支分类 panels ---------- */
+.task-subnote {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* ---------- Routine steps ---------- */
+.task-routine-form { margin-bottom: 4px; }
+.task-step-row { padding: 5px 0; }
+.task-step-no {
+  flex: none;
+  min-width: 42px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.task-step-remove {
+  flex: none;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--quiet);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+.task-step-remove:hover { color: var(--hard); }
+.task-steps { padding: 2px 0 10px 34px; }
+.task-step-line { padding: 3px 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.task-step-line b {
+  margin-right: 8px;
+  color: var(--accent);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.task-subtotal { margin: 10px 0 12px; font-size: 20px; font-weight: 650; letter-spacing: -.02em; }
+.task-subtotal small { margin-left: 6px; color: var(--muted); font-size: 11px; font-weight: 400; }
+.task-cat-row { padding: 9px 0; border-bottom: 1px solid #f1f1f1; font-size: 13px; }
+.task-cat-row:last-child { border-bottom: 0; }
+.task-cat-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.task-cat-head b { font-weight: 600; }
+.task-cat-head span { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.task-cat-bar { height: 6px; margin-top: 7px; border-radius: 3px; background: #efefef; overflow: hidden; }
+.task-cat-bar i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+.task-cat-bar.income i { background: #898989; }
+.task-cat-empty { padding: 14px 0; color: var(--quiet); font-size: 12px; }
+
+/* 支出/收入 kind toggle inside the merged ledger form. Scoped above
+   .task-row span { flex: 1; min-width: 0 } which would otherwise shrink it. */
+.task-row .task-kind-toggle,
+#taskExpenseKind {
+  display: inline-flex;
+  flex: none;
+  min-width: max-content;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  overflow: hidden;
+  background: #fff;
+}
+.task-kind-toggle button {
+  flex: none;
+  border: 0;
+  background: transparent;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.task-kind-toggle button.active {
+  background: var(--accent);
+  color: #fff;
+}
+.task-income-line span { color: #636363; }
+#taskExpenseNewCategory { max-width: 128px; }
+/* The merged form wraps to two lines: kind+amount+category, then note+save. */
+.task-ledger-form-row { border-bottom: 0; padding: 4px 0; gap: 8px; }
+
+/* Shared, keyboard-accessible voice capture panel. */
+.task-voice { width: min(440px, calc(100vw - 36px)); box-sizing: border-box; padding: 24px; border: 1px solid var(--line, #e7e7e7); border-radius: 20px; color: var(--text, #292929); background: var(--surface, #fff); }
+.task-voice::backdrop { background: rgba(36, 36, 36, .35); }
+.task-voice h2 { margin: 0 0 8px; font-size: 20px; }
+.task-voice p, .task-voice-status { font-size: 13px; line-height: 1.65; }
+.task-voice-status { min-height: 50px; margin: 16px 0; }
+.task-voice textarea { width: 100%; box-sizing: border-box; padding: 12px; resize: vertical; font: inherit; border: 1px solid var(--line, #e7e7e7); border-radius: 12px; }
+.task-voice-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.task-voice button { border: 0; padding: 10px 14px; border-radius: 10px; background: var(--accent, #686868); color: #fff; font: inherit; font-size: 13px; cursor: pointer; }
+.task-voice button:disabled { opacity: .45; cursor: default; }
+.task-voice button[hidden] { display: none; }

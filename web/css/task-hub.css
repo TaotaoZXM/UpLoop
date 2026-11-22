@@ -1,0 +1,94 @@
+/* Task hub — reference layout: the four-cell grid card sits at the top of the
+   open sub-page (grid + content below, like the Alipay home). The standalone
+   hub screen and the "今天" summary card are gone. Scoped so nothing else
+   changes. */
+
+#taskTaskGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin: 4px 0 18px;
+  padding: 17px 8px 15px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(41, 41, 41, .06);
+}
+.task-task-cell {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0 2px;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.task-task-ico {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 15px;
+  color: #fff;
+  box-shadow: 0 5px 12px rgba(41, 41, 41, .16), inset 0 1px 0 rgba(255, 255, 255, .28);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+.task-task-cell:hover .task-task-ico { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(41, 41, 41, .2); }
+.task-task-cell:active .task-task-ico { transform: scale(.94); }
+.task-task-cell:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 14px; }
+.task-task-ico svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.task-task-ico.tone-green  { background: linear-gradient(145deg, #939393 0%, #686868 100%); }
+.task-task-ico.tone-blue   { background: linear-gradient(145deg, #939393 0%, #696969 100%); }
+.task-task-ico.tone-amber  { background: linear-gradient(145deg, #b0b0b0 0%, #7d7d7d 100%); }
+.task-task-ico.tone-violet { background: linear-gradient(145deg, #9f9f9f 0%, #686868 100%); }
+.task-task-label { color: #3a3a3a; font-size: 12px; font-weight: 600; line-height: 1.2; white-space: nowrap; }
+.task-task-cell.active .task-task-ico {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px var(--accent),
+    0 5px 12px rgba(41, 41, 41, .16);
+}
+.task-task-cell.active .task-task-label { color: var(--accent); font-weight: 700; }
+.task-task-count {
+  position: absolute;
+  top: -3px;
+  right: calc(50% - 31px);
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #686868;
+  box-shadow: 0 0 0 2px #fff;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+}
+.task-task-count[hidden] { display: none; }
+
+/* 正反馈 sub-page: show only the task grid and the feedback block inside
+   startScreen, so it reads as a standalone page instead of the chat home. */
+.screen.start.task-subpage-feedback > *:not(#feedbackBlock):not(.task-task-grid) { display: none !important; }
+.screen.start.task-subpage-feedback { text-align: left; padding-top: 26px; }
+.screen.start.task-subpage-feedback #feedbackBlock { margin-top: 4px; }
+.screen.start.task-subpage-feedback .feedback-motto { text-align: left; }
+
+@media (max-width: 360px) {
+  #taskTaskGrid { padding: 14px 4px 12px; }
+  .task-task-ico { width: 42px; height: 42px; border-radius: 13px; }
+  .task-task-label { font-size: 11px; }
+}

@@ -1,0 +1,193 @@
+/* F-S4 floating dock — reference layout: a separate AI orb on the left and a
+   five-slot glass capsule on the right. Self-contained: no rule outside this
+   file touches .bottom-nav, so the legacy four-tab markup stays intact (and
+   the inline navs object keeps working) while the new dock is on screen. */
+
+.task-dock {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 18px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  font-family: inherit;
+  pointer-events: none;
+}
+.task-dock > * { pointer-events: auto; }
+
+/* The legacy four-tab bar is hidden, not removed: showScreen() still toggles
+   .active on those buttons, and the archived slice tests read their markup. */
+.task-dock-on .bottom-nav { display: none !important; }
+
+/* ---------- left: AI orb ---------- */
+.task-dock-ai {
+  position: relative;
+  flex: none;
+  width: 74px;
+  height: 74px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 18%, #ffffff 0%, #f9f9f9 48%, #ededed 100%);
+  box-shadow:
+    0 8px 22px rgba(60, 60, 60, .16),
+    0 0 0 3px rgba(255, 255, 255, .92),
+    inset 0 0 0 1px rgba(255, 255, 255, .85);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+.task-dock-ai::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background: conic-gradient(
+    from 205deg,
+    rgba(175, 175, 175, .30), rgba(164, 164, 164, .26),
+    rgba(213, 213, 213, .24), rgba(205, 205, 205, .22),
+    rgba(175, 175, 175, .30)
+  );
+  filter: blur(12px);
+  opacity: .8;
+  pointer-events: none;
+}
+.task-dock-ai-face {
+  position: absolute;
+  top: 1px;
+  left: 50%;
+  z-index: 1;
+  width: 68px;
+  height: 68px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.task-dock-ai-label {
+  position: absolute;
+  right: 0;
+  bottom: 3px;
+  left: 0;
+  z-index: 2;
+  color: #696969;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 1px 3px #fff, 0 0 6px #fff;
+}
+.task-dock-ai.active {
+  box-shadow:
+    0 8px 22px rgba(105, 105, 105, .26),
+    0 0 0 3px rgba(255, 255, 255, .95),
+    0 0 0 5px rgba(116, 116, 116, .42);
+}
+.task-dock-ai:hover { box-shadow: 0 10px 26px rgba(60, 60, 60, .22), 0 0 0 3px rgba(255, 255, 255, .95); }
+.task-dock-ai:active { transform: scale(.95); }
+.task-dock-ai:focus-visible { outline: 2px solid #747474; outline-offset: 3px; }
+
+/* ---------- right: five-slot capsule ---------- */
+.task-dock-pill {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  height: 74px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: stretch;
+  padding: 0 5px;
+  border: 1px solid rgba(255, 255, 255, .92);
+  border-radius: 999px;
+  background: rgba(246, 246, 246, .88);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow:
+    0 8px 24px rgba(60, 60, 60, .13),
+    inset 0 1px 0 rgba(255, 255, 255, .95);
+}
+.task-dock-item {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #424242;
+  font-family: inherit;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: -.015em;
+  line-height: 1.1;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.task-dock-ico {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 12px;
+  transition: background .16s ease, color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+.task-dock-ico svg {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.task-dock-item:hover .task-dock-ico { transform: translateY(-1px); }
+.task-dock-item.active { color: #313131; font-weight: 700; }
+.task-dock-item.active .task-dock-ico {
+  background: linear-gradient(145deg, #898989 0%, #696969 100%);
+  color: #fff;
+  box-shadow: 0 4px 11px rgba(105, 105, 105, .38);
+}
+.task-dock-item:focus-visible { outline: 2px solid #747474; outline-offset: -2px; border-radius: 14px; }
+
+/* Optional notification badge, same style as the reference image. */
+.task-dock-badge {
+  position: absolute;
+  top: 8px;
+  left: calc(50% + 8px);
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #686868;
+  box-shadow: 0 0 0 2px rgba(246, 246, 246, .95);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+.task-dock-badge.dot {
+  top: 11px;
+  left: calc(50% + 9px);
+  width: 9px;
+  min-width: 9px;
+  height: 9px;
+  padding: 0;
+}
+.task-dock-badge[hidden] { display: none; }
+
+/* Narrow phones: shrink the orb a little so five labels still fit. */
+@media (max-width: 360px) {
+  .task-dock { left: 8px; right: 8px; gap: 7px; }
+  .task-dock-ai { width: 66px; height: 66px; }
+  .task-dock-ai-face { width: 62px; height: 62px; }
+  .task-dock-pill { height: 68px; padding: 0 2px; }
+  .task-dock-item { font-size: 8.5px; }
+  .task-dock-ico { width: 29px; height: 29px; }
+  .task-dock-ico svg { width: 21px; height: 21px; }
+}

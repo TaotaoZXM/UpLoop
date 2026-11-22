@@ -1,0 +1,79 @@
+/* Square task cards on a user-controlled circular track. */
+body:has(#overviewScreen:not(.hidden)){padding:0;background:var(--surface-subtle)}
+.phone:has(#overviewScreen:not(.hidden)){width:100%;height:100dvh;min-height:0;border:0;border-radius:0;box-shadow:none;background:var(--surface-subtle)}
+.phone:has(#overviewScreen:not(.hidden)) .appbar{height:56px;padding:0 clamp(20px,4vw,64px);background:var(--surface-subtle);border-bottom:1px solid var(--line)}
+.phone #overviewScreen{padding:0 20px calc(94px + env(safe-area-inset-bottom,0px));background:var(--surface-subtle);overflow-x:hidden}
+.phone:has(#overviewScreen:not(.hidden)) .task-dock{width:min(430px,calc(100% - 28px));left:50%;right:auto;transform:translateX(-50%);bottom:12px}
+.phone:has(#overviewScreen:not(.hidden)) .task-dock-pill{height:64px;background:#ffffffed;border:1px solid var(--line);box-shadow:0 4px 18px var(--text)0a}
+.draw{--square:160px;--radius:390px;max-width:1080px;min-height:calc(100dvh - 150px);margin:auto;padding:18px 0 0;display:flex;flex-direction:column;color:var(--text)}
+.draw,.draw *,.dr-flying,.dr-flying *{box-sizing:border-box}
+.draw button{font:inherit;cursor:pointer;color:inherit;-webkit-appearance:none;appearance:none}
+.draw [hidden]{display:none!important}
+.draw :focus-visible{outline:2px solid var(--focus);outline-offset:4px}
+.draw .dr-head{display:flex;align-items:center;justify-content:space-between;flex:none}
+.draw .dr-head h1{font-size:18px;font-weight:650;letter-spacing:-.5px}
+.draw .dr-add{width:36px;height:36px;border:1px solid var(--line-strong);border-radius:50%;background:transparent;font-size:22px}
+.draw .dr-add:hover{background:var(--accent-soft)}
+.draw .dr-intro{text-align:center;margin:4px 0 16px;flex:none}
+.draw .dr-eyebrow{font-size:9px;letter-spacing:.23em;color:var(--muted);margin:0 0 8px}
+.draw .dr-lead{font-family:Georgia,"Songti SC","Noto Serif SC",serif;font-size:28px;font-weight:600;letter-spacing:-.03em;line-height:1.3;margin:0}
+.draw .dr-status{font-size:12px;color:var(--muted);margin:9px 0 0}
+.draw .dr-selected{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;width:min(100%,690px);margin:0 auto;flex:none;z-index:3}
+.draw .dr-slot{position:relative;aspect-ratio:1;min-width:0;border:1px dashed var(--line-strong);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:var(--muted);background:var(--selected);font-size:11px}
+.draw .dr-slot-no{font-family:Georgia,serif;font-size:26px;opacity:.5}
+.draw .dr-slot.is-filled{border:0;background:transparent}
+.draw .dr-chosen{position:absolute;inset:0;border:1px solid var(--line-strong);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 8px 20px var(--text)08}
+.draw .dr-remove{position:absolute;right:6px;top:6px;width:28px;height:28px;border:0;border-radius:50%;background:var(--selected);color:var(--text-3);font-size:18px;z-index:4}
+.draw .dr-remove:hover{background:var(--accent-soft)}
+.draw .dr-stage{position:relative;min-height:220px;flex:1;isolation:isolate;margin:16px -20px 0;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.draw .dr-deck{position:absolute;inset:0;perspective:1000px}
+.draw .dr-orbit{position:absolute;width:calc(var(--radius)*2);height:calc(var(--radius)*2);left:50%;top:70px;transform:translateX(-50%);border:1px solid var(--line);border-radius:50%;pointer-events:none}
+.draw .dr-orbit::before{content:'';position:absolute;inset:28px;border:1px dashed var(--line);border-radius:50%}
+.draw .dr-card{position:absolute;left:50%;top:12px;width:var(--square);height:var(--square);margin-left:calc(var(--square)/-2);padding:0;border:1px solid var(--line-strong);border-radius:16px;background:#fff;transform-origin:50% calc(var(--radius) + var(--square)/2);transform:rotate(var(--angle));transition:transform .52s cubic-bezier(.22,1,.36,1),opacity .3s,box-shadow .2s;box-shadow:0 8px 24px var(--text)0c;text-align:left;overflow:hidden}
+.draw .dr-card.is-front{border-color:var(--line-active);box-shadow:0 12px 30px var(--line-active)1c}
+.draw .dr-card:not(.is-front){background:var(--selected)}
+.draw .dr-card.is-hidden{opacity:0;pointer-events:none}
+.draw .dr-card:hover:not(:disabled){box-shadow:0 12px 32px var(--line-active)26;border-color:var(--line-active)}
+.draw .dr-face,.dr-flying .dr-face{display:flex;flex-direction:column;position:relative;width:100%;height:100%;padding:15px;color:var(--text);text-align:left;background:linear-gradient(145deg,#fff,var(--surface-subtle))}
+.draw .dr-face::before,.dr-flying .dr-face::before{content:'';position:absolute;inset:6px;border:1px solid var(--line-soft);border-radius:11px;pointer-events:none}
+.draw .dr-scene,.dr-flying .dr-scene{font-size:10px;color:var(--muted);letter-spacing:.08em;line-height:1.3}
+.draw .dr-title,.dr-flying .dr-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;overflow-wrap:anywhere;font-size:17px;font-weight:550;line-height:1.45;margin:auto 0;letter-spacing:-.03em}
+.draw .dr-meta,.dr-flying .dr-meta{display:flex;flex-wrap:wrap;gap:3px 7px;max-height:43%;overflow:auto;font-size:10px;line-height:1.5;color:var(--muted)}
+.draw .dr-meta span:first-child,.dr-flying .dr-meta span:first-child{display:none}
+.draw .dr-controls{flex:none;z-index:4;max-width:440px;width:100%;margin:0 auto;padding:0 0 10px}
+.draw .dr-browse{display:flex;justify-content:center;align-items:center;gap:22px}
+.draw .dr-arrow{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line-strong);background:transparent;border-radius:50%;font-size:20px}
+.draw .dr-count{font-size:12px;color:var(--muted);min-width:50px;text-align:center;font-variant-numeric:tabular-nums}
+.draw .dr-hint{margin:8px 0 12px;text-align:center;color:var(--muted);font-size:11px}
+.draw .dr-actions{display:flex;gap:10px}
+.draw .dr-primary,.draw .dr-ghost-btn{min-height:46px;border-radius:12px;border:1px solid var(--line-strong);font-size:13px;padding:0 20px;transition:background .15s,transform .15s}
+.draw .dr-primary{flex:1;border-color:var(--primary);background:var(--primary);color:var(--on-primary);font-weight:600}
+.draw .dr-ghost-btn{background:#fff;color:var(--text-3)}
+.draw .dr-primary:hover{background:#b9e523;border-color:#b9e523;transform:translateY(-1px)}
+.draw .dr-ghost-btn:hover{background:var(--accent-soft)}
+.draw .dr-primary:active,.draw .dr-ghost-btn:active{transform:translateY(1px)}
+.draw[data-view=full] .dr-stage,.draw[data-view=finished] .dr-stage{opacity:.3;pointer-events:none}
+.draw .dr-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:50px 0}
+.draw .dr-empty h2{font-size:22px;font-weight:500}
+.draw .dr-empty .dr-primary{flex:none;min-width:180px}
+.draw .dr-empty-square{width:100px;height:100px;border:1px dashed var(--line-strong);border-radius:16px;transform:rotate(-10deg);background:var(--selected)}
+.dr-flying{position:fixed;z-index:10000;pointer-events:none;transform-origin:0 0;border:1px solid var(--line-active);border-radius:16px;box-shadow:0 18px 40px var(--line-active)26;overflow:hidden;background:#fff}
+@media(min-width:1000px){.draw{--square:188px;--radius:520px;padding-top:22px}.draw .dr-intro{margin-bottom:22px}.draw .dr-selected{width:650px}.draw .dr-stage{min-height:240px}.draw .dr-lead{font-size:34px}}
+@media(max-width:700px){.draw{--square:150px;--radius:300px;min-height:calc(100dvh - 150px)}.draw .dr-selected{gap:8px;max-width:450px}.draw .dr-slot{border-radius:12px}.draw .dr-chosen{border-radius:12px}.draw .dr-chosen .dr-face{padding:11px 9px}.draw .dr-chosen .dr-title{font-size:12px;-webkit-line-clamp:3;line-height:1.35}.draw .dr-chosen .dr-meta{font-size:8px;line-height:1.4;max-height:40%}.draw .dr-chosen .dr-scene{font-size:8px}.draw .dr-remove{width:22px;height:22px;right:3px;top:3px;font-size:16px}.draw .dr-intro{margin:14px 0 20px}.draw .dr-lead{font-size:24px}.draw .dr-stage{min-height:210px;margin-top:28px}.draw .dr-face{padding:15px}.draw .dr-title{font-size:16px}}
+@media(max-height:720px) and (max-width:700px){.draw{--square:126px;--radius:260px;padding-top:10px}.draw .dr-intro{margin:5px 0 12px}.draw .dr-lead{font-size:21px}.draw .dr-eyebrow{display:none}.draw .dr-stage{min-height:170px;margin-top:16px}.draw .dr-selected{max-width:300px}.draw .dr-controls{padding-bottom:3px}.draw .dr-primary,.draw .dr-ghost-btn{min-height:40px}}
+@media(prefers-reduced-motion:reduce){.draw *{transition:none!important;animation:none!important}}
+/* Tarot format: portrait cards in the ring and the three selected positions. */
+.draw{--square:136px}
+.draw .dr-slot{aspect-ratio:2 / 3}
+.draw .dr-card{height:calc(var(--square)*1.5);transform-origin:50% calc(var(--radius) + var(--square)*.75)}
+.draw .dr-selected{width:min(100%,570px)}
+.draw .dr-stage{min-height:265px}
+@media(min-width:1000px){.draw{--square:150px}.draw .dr-selected{width:540px}.draw .dr-stage{min-height:280px}}
+@media(max-width:700px){.draw{--square:126px}.draw .dr-selected{max-width:370px}.draw .dr-stage{min-height:244px;margin-top:18px}.draw .dr-chosen .dr-title{font-size:13px}}
+@media(max-height:720px) and (max-width:700px){.draw{--square:100px}.draw .dr-selected{max-width:264px}.draw .dr-stage{min-height:185px;margin-top:12px}.draw .dr-chosen .dr-title{font-size:11px}}
+@media(min-width:1000px){.draw .dr-selected{width:430px}.draw .dr-stage{min-height:244px}.draw .dr-intro{margin:0 0 14px}.draw .dr-lead{font-size:30px}}
+@media(min-width:701px) and (max-height:850px){.draw{--square:110px;padding-top:12px}.draw .dr-selected{width:330px}.draw .dr-stage{min-height:184px;margin-top:12px}.draw .dr-intro{margin:2px 0 10px}.draw .dr-lead{font-size:25px}.draw .dr-status{margin-top:6px}}
+
+.draw .dr-important{position:absolute;right:4px;top:4px;width:24px;height:24px;padding:0;border:0;background:transparent;color:var(--muted);font-size:16px;z-index:3}
+.draw .dr-important[aria-pressed=true]{color:var(--accent-text)}
+.draw .dr-chosen .dr-important{right:28px}
