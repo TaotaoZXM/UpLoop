@@ -1,77 +1,89 @@
 # UpLoop
 
-This repository is the first clean public source snapshot of **UpLoop**, prepared on 2026-11-23 (Asia/Shanghai). It contains a sanitized copy of the latest product source, tests, and lockfile. It is **not** a publication of any previous private repository's git history, and it is **not** a website deployment.
+UpLoop 是一个给自己用的网页应用：记下要做的事和突然出现的灵感，做完以后按天回看。界面上的产品名是 **UpLoop**。它是可以添加到主屏幕的 PWA，后面是 Express / TypeScript 接口；正式保存账号和数据时使用 PostgreSQL。
 
-UpLoop is a personal productivity web app: a PWA frontend plus an Express / TypeScript API. A full server run uses PostgreSQL. The product name shown in the UI is UpLoop.
+下面先说现在能怎么用。文末再说明兼容用的内部名称，以及这份公开源码做了哪些删减。
 
-Some **internal compatibility identifiers are intentional and should not be renamed blindly**:
+## 现在怎么用
 
-- URL mount prefix `/task` (`BASE_PATH`, default in the local demo)
-- Session cookie name `task_session`
-- Service worker cache prefix `task-` (current cache bucket in this snapshot: `task-v57`)
+底栏有三项，依据 `web/js/dock.js`：
 
-## Requirements
+- **Home**：打开助手起始页（`startScreen`）。可以打字或点选来新建待办，也可以补记一件已经做完的事。助手会从一句话里整理标题、日期和时间。没有配置模型密钥时，走页面引导和规则回复，不调用外部模型。
+- **My Tasks**：进入管理工作区。源码里的分段是「今天」「To-do」「Done」「Checklist」。To-do 页里还有「任务」和「灵感」。任务可以带截止日期、重要标记、项目和情境，也可以拆成步骤。
+- **Daily Recap**：按日期回看当天留下的记录。健康开关关闭时，日历和健康页面会转到这里。
 
-- Node.js 22 or newer (`package.json` `engines`)
-- PostgreSQL, only for `npm start` / `npm run migrate`
-- No PostgreSQL is required for `npm run demo` or the unit test suite
+右上角「账户」菜单里有 **我的**（`meScreen`）。这里可以导出全部数据，也可以删除账号；删除前要输入「删除」。完成任务时的鼓励默认是文字，可以改成「文字 + 语音」（用浏览器自己的朗读）或关闭。同一页可以生成只显示一次的设备令牌，对应后端的 `/v1/device`。本仓库没有固件，也不能据此认为已经交付了硬件。
 
-## Setup
+另外还有一块按天汇总的看板，实现在 `web/js/home.js`（画面是 `homeScreen`）：日期、当天待办摘要、已完成，以及一个「抽三件事」入口。底栏上标着 Home 的按钮并不打开这块看板。抽牌页实现在 `web/js/draw.js`（Task Pull）：未完成的待办进牌组，滑动浏览后抽取，最多三张；不足三张时以现有张数为限，确认后就停在抽中的这几张上。这是当前的抽牌，不是已经撤掉的「按精力推荐最多三项」。看板上的按钮会去调用抽牌页，抽牌页本身不在底栏三项里。本文没有做浏览器点击走查，所以不把看板或抽牌写成已经从默认导航点开确认过的入口。
+
+注册使用邮箱和密码。只有把邮件投递配置成 `directmail` 时，才会要求先完成邮箱验证；没配邮件时，不要把它理解成验证信已经发出。
+
+## 默认关闭，或要另行配置
+
+这些能力在源码里，但不是开箱即用：
+
+- **健康记录** 和 **任务复盘** 默认关闭。只有 `WELLNESS_ENABLED=1` 或 `TASK_REFLECTION_ENABLED=1` 才打开。健康关闭时，首次引导只问是否同意把对话和语音识别送到云端处理；不同意仍可手动记任务、灵感和清单。性别、饮水量、出生年月只在健康开关打开后的四步引导里出现。
+- **模型补全** 需要 `DEEPSEEK_API_KEY`。没有这把钥匙时使用规则回复。
+- **听写** 需要安全上下文（HTTPS 或 localhost）、浏览器录音许可，以及 `DASHSCOPE_API_KEY`。没配钥匙时，不能当成已经接通的语音识别。完成任务时的「文字 + 语音」用的是浏览器朗读，和这项云端合成不是一回事；云端朗读同样依赖 `DASHSCOPE_API_KEY`。
+- **设备接口** 只是令牌和 `/v1/device` 卡片接口。仓库里没有设备端程序。
+
+记账、焦点等路由还在服务端。记账页面在当前导航里会被转走，不作为这里的主要功能。
+
+## 本地运行
+
+需要 Node.js 22 或更新版本。
+
+### 演示：内存数据，不必安装 PostgreSQL
 
 ```bash
 npm ci
-cp deploy/.env.example .env
-```
-
-Edit `.env` and replace every placeholder. Never commit `.env`.
-
-## Local demo (in-memory, no PostgreSQL)
-
-```bash
 npm run demo
 ```
 
-This starts the full API with a seeded in-memory dataset. Data lives only in that process and resets when it exits.
+演示脚本默认监听 `127.0.0.1:8896`，并把 `BASE_PATH` 设为 `/task`（除非你事先改过这些变量）。打开：
 
-- App: http://127.0.0.1:8896/task/
-- One-click demo login: http://127.0.0.1:8896/task/demo
-- Demo account: `admin` / `12345678`
+- 应用：http://127.0.0.1:8896/task/
+- 一键进入：http://127.0.0.1:8896/task/demo
 
-The demo script sets `PORT=8896` and `BASE_PATH=/task` unless you override them. It does not set a DeepSeek key; without `DEEPSEEK_API_KEY`, chat uses rule-based replies.
+一键地址会写入演示会话并进入界面。脚本同时准备了一个只存在于该进程里的本地账号：`admin` / `12345678`。这不是真实用户，进程退出后数据就没了。演示用户在种子数据里已经完成引导，所以不一定会再看到首次询问。未配置 `DEEPSEEK_API_KEY` 时，对话使用规则回复。
 
-## Full server (PostgreSQL)
-
-`.env` must include a real local `DATABASE_URL` and a `JWT_SECRET` of at least 16 characters (see `server/src/env.ts`). `DEVICE_TOKEN_SECRET` is required when `NODE_ENV=production`.
+### 完整服务：PostgreSQL
 
 ```bash
+cp deploy/.env.example .env
 npm run migrate
 npm start
 ```
 
-Defaults: `HOST=127.0.0.1`, `PORT=3200`. With `BASE_PATH=/task`, open http://127.0.0.1:3200/task/. Use `npm run dev` for `tsx watch`. Migrations default to cap `001`; `002` needs the PostgreSQL `ltree` extension.
+把 `.env` 里的占位符换成你自己的本地配置，不要提交 `.env`，也不要填入别人的密钥。`DATABASE_URL` 指向你的数据库；`JWT_SECRET` 至少 16 个字符。`NODE_ENV=production` 时还必须设置 `DEVICE_TOKEN_SECRET`。默认监听 `127.0.0.1:3200`；`BASE_PATH=/task` 时打开 http://127.0.0.1:3200/task/ 。需要由 Node 自己提供网页时，设置 `SERVE_STATIC=1`。
 
-Optional model keys (`DEEPSEEK_API_KEY`, `DASHSCOPE_API_KEY`) stay empty unless you configure those providers yourself. Official default model names and public API bases are listed in `deploy/.env.example` and `server/src/env.ts`.
+开发时用 `npm run dev`（`tsx watch`）。迁移默认停在 `001`。`002` 需要 PostgreSQL 的 `ltree` 扩展，确认可用后再设 `MIGRATE_MAX=002`。
 
-## Tests
+可选的 `DEEPSEEK_API_KEY` 和 `DASHSCOPE_API_KEY` 留空即可。模型名和公开的接口地址写在 `deploy/.env.example` 里，那些不是密钥。
+
+### 测试
 
 ```bash
 npm run typecheck
 DEEPSEEK_API_KEY= DASHSCOPE_API_KEY= DATABASE_URL= BASE_PATH= npm test
 ```
 
-Do not point tests at a real database or real API keys, and do not load a personal `.env`.
+不要让测试加载个人 `.env`，也不要指向真实数据库或真实密钥。
 
-## What is in this snapshot
+## 限制
 
-- `server/` — TypeScript API, database migrations, and tests
-- `web/` — frontend (HTML/CSS/JS, icons, service worker, manifest)
-- `package.json` and `package-lock.json`
-- `deploy/.env.example` and a short self-host outline (placeholders only)
+- 待办和当天的循环任务合计最多 10 项，这是界面里已有的上限。
+- GitHub Pages 跑不了这个应用：登录、接口和数据库都要 Node.js 进程。这里只有源码。
+- 本仓库没有许可证文件。
 
-Historical production host names, nginx/cloud-server configs, firmware, design source artwork, local environment files, databases, browser captures, and other apps are not included.
+自托管的短步骤见 `deploy/README.md`。
 
-This snapshot does not add a license file; none was authorized for this publication.
+## 这份源码
 
-## Self-hosting and GitHub Pages
+为了和已经在用的地址、Cookie、缓存兼容，下面这些名字是故意留下的，请不要整库替换：
 
-See `deploy/README.md`. GitHub Pages cannot run the TypeScript/Express API or PostgreSQL, so it cannot host the working app. This snapshot is source only.
+- 访问前缀 `/task`（环境变量 `BASE_PATH`，本地演示的默认值）
+- 登录 Cookie 名 `task_session`
+- Service Worker 缓存前缀 `task-`（本快照里的缓存桶是 `task-v57`）
+
+这是一份净化后的公开快照，方便阅读和在自己的机器上运行。它不是任何私有仓库的 git 历史，也不带网站部署配置。真实环境文件、本地数据库、历史部署脚本和其他应用不在其中。因此它和某台正在运行的工作目录不会逐字相同；那些差异是净化时有意留下的。
