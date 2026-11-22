@@ -1,0 +1,102 @@
+/* Shared component styles, with final light monochrome tokens in monochrome.css.
+   The former openGym dark interpretation (纯黑底 / 电绿) was dropped so the
+   Wellness records page matches the dock, Task hub, Expense, Routine, Today
+   and Me screens. Colors come from the global tokens in index.html and monochrome.css:
+   --surface / --soft / --line / --muted / --quiet / --accent / --accent-soft.
+   The openGym layout language is kept: 2x2 cards, big tabular numbers,
+   week strip, day toolbar. */
+#calScreen.og-enabled {
+  border-radius: 18px;
+}
+
+#taskHealth .og-section-label {
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin: 18px 2px 10px;
+}
+#taskHealth .og-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+#taskHealth .og-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+  padding: 14px 14px 12px; min-height: 96px; cursor: pointer; text-align: left;
+  transition: border-color .15s ease, background .15s ease;
+}
+#taskHealth .og-card.active { border-color: var(--accent); background: var(--accent-soft); }
+#taskHealth .og-card-label { font-size: 12px; color: var(--muted); }
+#taskHealth .og-value {
+  display: block; margin-top: 8px; font-size: 30px; line-height: 1.1;
+  font-weight: 650; letter-spacing: -.03em; color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+#taskHealth .og-value small { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 3px; }
+#taskHealth .og-sub { margin-top: 6px; font-size: 11px; color: var(--quiet); }
+#taskHealth .og-week { display: flex; gap: 6px; margin-top: 12px; }
+#taskHealth .og-week button {
+  flex: 1; min-width: 0; padding: 8px 2px; border-radius: 10px;
+  background: var(--soft); border: 1px solid var(--line); color: var(--muted);
+  font-size: 11px; line-height: 1.5;
+}
+#taskHealth .og-week button.og-active { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+#taskHealth .og-week button strong { display: block; font-size: 14px; color: var(--text); }
+#taskHealth .og-toolbar { display: flex; align-items: center; gap: 8px; margin: 14px 0 4px; }
+#taskHealth .og-toolbar button,
+#taskHealth .og-action {
+  background: var(--surface); color: var(--muted); border: 1px solid var(--line);
+  border-radius: 10px; padding: 8px 12px; font-size: 12px;
+}
+#taskHealth .og-toolbar button.og-primary,
+#taskHealth .og-action.og-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+#taskHealth .og-toolbar input[type="date"] {
+  flex: 1; min-width: 0; background: var(--surface); color: var(--text);
+  border: 1px solid var(--line); border-radius: 10px; padding: 7px 8px; font-size: 12px;
+}
+#taskHealth .og-hint { margin: 10px 2px 0; font-size: 12px; color: var(--muted); line-height: 1.6; }
+#taskHealth .og-suggestion {
+  margin-top: 10px; padding: 12px; border: 1px dashed var(--accent);
+  border-radius: 12px; font-size: 12px; color: var(--text); background: var(--accent-soft);
+}
+#taskHealth .og-entries { margin-top: 14px; }
+#taskHealth .og-entry {
+  display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+  background: var(--soft); border: 1px solid var(--line); border-radius: 12px;
+  margin-bottom: 8px; font-size: 12px;
+}
+#taskHealth .og-entry span { flex: 1; min-width: 0; }
+#taskHealth .og-entry input { width: 62px; background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 5px; }
+#taskHealth .og-entry button { background: transparent; border: 0; color: var(--quiet); font-size: 12px; }
+#taskHealth .og-form { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+#taskHealth .og-form input, #taskHealth .og-form select {
+  background: var(--surface); color: var(--text); border: 1px solid var(--line);
+  border-radius: 10px; padding: 8px; font-size: 12px; min-width: 0;
+}
+#taskHealth .og-empty { color: var(--quiet); font-size: 12px; margin: 10px 2px; }
+
+/* Other new modules keep Task's light theme. */
+.task-chat { margin-top: 18px; border-top: 1px solid #e7e7e7; padding-top: 14px; }
+.task-chat-list { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; }
+.task-msg { padding: 10px 12px; border-radius: 12px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+.task-msg.user { background: #efefef; align-self: flex-end; max-width: 88%; }
+.task-msg.assistant { background: #f5f5f5; align-self: flex-start; max-width: 92%; }
+.task-msg small { display: block; margin-top: 6px; color: #858585; font-size: 11px; }
+.task-chat-form { display: flex; gap: 8px; margin-top: 12px; position: sticky; bottom: 0; background: #fff; padding: 8px 0; }
+.task-chat-form input { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid #e7e7e7; border-radius: 10px; font: inherit; font-size: 13px; }
+.task-chat-form button { padding: 10px 16px; border: 0; border-radius: 10px; background: #686868; color: #fff; font: inherit; font-size: 13px; }
+.task-card { margin-top: 6px; padding: 8px 10px; border-left: 3px solid #686868; background: #f5f5f5; font-size: 12px; border-radius: 6px; }
+.task-onboarding { position: fixed; inset: 0; z-index: 9999; background: #efefef; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.task-onboarding-card { width: min(100%, 400px); background: #fff; border-radius: 14px; padding: 24px 20px; box-shadow: 0 16px 40px rgba(41, 41, 41,.16); }
+.task-onboarding-card h2 { margin: 8px 0 4px; font-size: 21px; }
+.task-onboarding-card p { color: #858585; font-size: 13px; line-height: 1.6; }
+.task-onboarding-card label { display: grid; gap: 6px; margin-top: 14px; color: #858585; font-size: 13px; }
+.task-onboarding-card input, .task-onboarding-card select { padding: 9px 0; border: 0; border-bottom: 1px solid #e7e7e7; font: inherit; outline: 0; }
+.task-onboarding-choices { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.task-onboarding-choices button { flex: 1; padding: 10px; border: 1px solid #e7e7e7; background: #fff; border-radius: 10px; font: inherit; font-size: 13px; }
+.task-onboarding-choices button.active { border-color: #686868; background: #efefef; }
+.task-onboarding-next { width: 100%; margin-top: 20px; padding: 11px; border: 0; border-radius: 8px; background: #686868; color: #fff; font: inherit; }
+.task-onboarding-error { color: #6b6b6b; font-size: 12px; min-height: 16px; margin-top: 8px; }
+.task-panel { margin-top: 12px; padding: 12px; border: 1px solid #e7e7e7; border-radius: 12px; background: #fff; }
+.task-panel h3 { margin: 0 0 8px; font-size: 14px; }
+.task-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #f1f1f1; font-size: 13px; }
+.task-row span { flex: 1; min-width: 0; }
+.task-row input[type="checkbox"] { accent-color: #686868; }
+.task-row button { border: 0; background: transparent; color: #6b6b6b; font-size: 12px; }
+.task-panel input, .task-panel select, .task-panel textarea { padding: 8px; border: 1px solid #e7e7e7; border-radius: 8px; font: inherit; font-size: 13px; }
+.task-panel button.task-primary { background: #686868; color: #fff; border: 0; border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 13px; }
+.task-muted { color: #858585; font-size: 12px; }

@@ -1,0 +1,450 @@
+/* v5 「瓷白」 light theme (docs/design/color-cards-v5.html).
+   Large areas stay neutral grey; 霁蓝 only marks "current" and the primary action; 胭脂 only for errors. */
+:root {
+  --canvas:#f5f5f5; --surface:#ffffff; --surface-subtle:#fafafa; --selected:#f0f0f0;
+  --line:#e5e5e5; --line-soft:#f0f0f0; --line-strong:#dedede; --line-active:#a3a3a3;
+  --text:#262626; --text-2:#404040; --text-3:#525252; --muted:#737373; --disabled:#a3a3a3;
+  --primary:#2a4b8d; --on-primary:#ffffff; --accent-text:#233f78; --accent-soft:#edf2fa; --accent-line:#c9d6ec; --focus:#3d63b0;
+  --danger:#b4364b; --danger-text:#9c2c40; --danger-soft:#fbeff1;
+  --shadow:0 3px 12px rgba(0,0,0,.045); --ring-soft:0 0 0 4px rgba(42,75,141,.10);
+  --accent:#2a4b8d;
+}
+
+/* ---------- global accents (small areas only) ---------- */
+.phone :focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.phone input:focus, .phone textarea:focus { border-color:var(--accent-line); box-shadow:var(--ring-soft); outline:none; }
+.task-dock-item.active { color:var(--accent-text); background:var(--accent-soft); }
+.task-dock-item.active .task-dock-ico { color:var(--accent-text); }
+.task-dock-ai.active, .task-dock-ai:hover { box-shadow:0 0 0 2px var(--accent-line), var(--shadow); }
+.ws-manage-tabs button[aria-current=page] { color:var(--accent-text); border-color:var(--accent-line); }
+.task-routine-progress progress::-webkit-progress-value, .task-water-progress progress::-webkit-progress-value { background:var(--primary); }
+.task-routine-progress progress::-moz-progress-bar, .task-water-progress progress::-moz-progress-bar { background:var(--primary); }
+.phone .sheet-submit:not([type=button]), .phone .task-add-actions #addAndDecompose { background:var(--primary); border-color:var(--primary); color:var(--on-primary); }
+.phone .task-add-actions .sheet-submit:not(#addAndDecompose) { background:var(--surface); border:1px solid var(--line-strong); color:var(--text-2); }
+.phone #doneList .done-row .check, .phone .done-row .done-mark { color:var(--primary); }
+.task-inline-status:not(:empty) { color:var(--text-3); }
+
+/* ---------- To-do cards ---------- */
+.phone #todoGroups .task-row.swipe-item, .phone #doneList .done-row.swipe-item { margin:10px 0; padding:0; border:1px solid var(--line); border-radius:16px; background:var(--surface); min-height:0; box-shadow:none; transition:border-color .15s ease, box-shadow .15s ease; }
+.phone #todoGroups .task-row .swipe-content, .phone #doneList .done-row .swipe-content { display:flex; align-items:center; gap:12px; padding:16px 15px; min-height:72px; border-radius:15px; }
+.phone #todoGroups .task-main { min-width:0; flex:1; text-align:left; }
+.phone #todoGroups .task-title { font-size:15px; font-weight:500; line-height:1.55; color:var(--text); }
+.phone #todoGroups .check { flex:none; width:24px; height:28px; font-size:24px; color:#bdbdbd; }
+.phone #todoGroups .check:hover { color:var(--primary); }
+@media(hover:hover) { .phone #todoGroups .task-row:hover { border-color:var(--line-strong); box-shadow:var(--shadow); } }
+/* Parent task with a checklist: accent bar, n/N · 当前, progress, chevron (no own circle). */
+.phone #todoGroups .task-row.swipe-item.has-task-plan { position:relative; overflow:hidden; }
+.phone #todoGroups .task-row.has-task-plan::before { content:''; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--primary); border-radius:16px 0 0 16px; z-index:1; }
+.phone #todoGroups .task-row.has-task-plan .check { display:none; }
+.phone #todoGroups .task-row.has-task-plan .swipe-content { padding-left:22px; }
+.phone #todoGroups .task-row.has-task-plan .task-title { font-weight:600; }
+.phone #todoGroups .task-row.has-task-plan .meta { display:none; }
+.plan-card-summary { display:block; margin:6px 0 10px; font-size:12px; line-height:1.5; color:var(--muted); overflow-wrap:anywhere; }
+.plan-card-progress { display:block; width:100%; max-width:300px; height:4px; border-radius:4px; background:#ebebeb; overflow:hidden; }
+.plan-card-progress > i { display:block; height:100%; background:var(--primary); border-radius:4px; transition:width .25s ease; }
+.plan-card-open { flex:none; width:24px; min-height:40px; border:0; background:transparent; color:var(--disabled); font-size:24px; cursor:pointer; }
+.has-task-plan.plan-complete .plan-card-summary { color:var(--disabled); }
+
+/* ---------- Checklist page: one card format for every checklist ---------- */
+.checklist-list { display:grid; gap:10px; margin-top:6px; }
+.checklist-card { display:flex; align-items:center; gap:10px; width:100%; padding:15px 12px 15px 16px; border:1px solid var(--line); border-radius:16px; background:var(--surface); color:var(--text); font:inherit; text-align:left; cursor:pointer; }
+.checklist-card:hover { border-color:var(--line-strong); box-shadow:var(--shadow); }
+.checklist-card-copy { flex:1; min-width:0; display:block; }
+.checklist-card-copy strong { display:block; font-size:15px; font-weight:600; line-height:1.5; overflow-wrap:anywhere; }
+.checklist-card-copy small { display:block; margin:5px 0 10px; font-size:12px; color:var(--muted); line-height:1.5; }
+.checklist-card.is-draft .checklist-card-copy small { margin-bottom:0; }
+.checklist-card.is-complete strong { color:var(--disabled); text-decoration:line-through; }
+.checklist-card-tag { flex:none; padding:3px 8px; border-radius:99px; background:var(--selected); color:var(--text-3); font-size:11px; }
+.checklist-card.is-draft .checklist-card-tag { background:var(--accent-soft); color:var(--accent-text); }
+.checklist-card-open { flex:none; color:var(--disabled); font-size:22px; }
+.checklist-new { width:100%; min-height:50px; margin-top:12px; border:1px dashed var(--line-strong); border-radius:16px; background:transparent; color:var(--text-2); font:inherit; font-size:14px; cursor:pointer; }
+.checklist-new:hover { background:var(--surface); border-color:var(--accent-line); color:var(--accent-text); }
+.task-routine-progress .plan-card-progress { max-width:none; margin-top:12px; height:5px; }
+
+/* ---------- Decomposition / checklist screen ---------- */
+.phone #decompositionScreen { display:flex; flex-direction:column; min-height:0; overflow:hidden; padding:0; background:var(--surface-subtle); }
+.phone #decompositionScreen.hidden { display:none; }
+.phone:has(#decompositionScreen:not(.hidden)) #taskDock { display:none; }
+.plan-scroll { flex:1; min-height:0; overflow:auto; padding:18px 20px 28px; }
+.plan-head { display:grid; grid-template-columns:36px 1fr auto; align-items:center; gap:8px; margin-bottom:18px; }
+.plan-head > strong { text-align:center; font-size:17px; font-weight:600; }
+.plan-head.is-view > strong { text-align:left; font-size:18px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.plan-head button[data-back] { width:36px; height:36px; border:0; background:transparent; color:var(--text-2); font-size:28px; line-height:1; cursor:pointer; }
+.plan-pill { padding:6px 14px; border:0; border-radius:99px; background:#e9edf1; color:var(--text-3); font:inherit; font-size:12px; cursor:pointer; }
+.plan-pill[aria-expanded=true] { background:var(--accent-soft); color:var(--accent-text); }
+.plan-count { font-family:Georgia,"Songti SC",serif; font-size:20px; color:var(--text-3); }
+.plan-menu { display:flex; justify-content:flex-end; gap:8px; margin:-8px 0 12px; }
+.plan-menu button { padding:7px 12px; border:1px solid var(--line-strong); border-radius:10px; background:var(--surface); color:var(--text-2); font:inherit; font-size:12px; cursor:pointer; }
+.plan-menu .is-danger, .plan-bottom .is-danger { color:var(--danger); border-color:#ecc9cf; }
+.decomposition-screen h1 { margin:0; font-size:24px; font-weight:700; line-height:1.4; overflow-wrap:anywhere; }
+.plan-title-input { width:100%; padding:4px 0; border:0; border-bottom:1px solid var(--line-strong); background:transparent; color:var(--text); font:inherit; font-size:22px; font-weight:700; }
+.plan-title-input:focus { box-shadow:none !important; border-bottom-color:var(--primary) !important; }
+.plan-summary { margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.6; }
+.plan-rule { height:1px; margin:16px 0 4px; border:0; background:var(--line); }
+.plan-status { margin:8px 0 0; min-height:0; font-size:12px; line-height:1.7; color:var(--text-3); }
+.plan-status:empty { display:none; }
+.plan-status.is-error { color:var(--danger-text); }
+.plan-link { padding:0; border:0; background:none; color:var(--accent-text); font:inherit; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+.plan-empty { margin:16px 0 4px; font-size:13px; color:var(--muted); line-height:1.8; }
+.plan-stage h2 { margin:20px 0 8px; font-size:14px; font-weight:600; color:var(--text); }
+.plan-num { font-family:Georgia,"Songti SC",serif; font-weight:700; color:var(--text-3); }
+.plan-row { display:flex; align-items:center; gap:12px; min-height:52px; margin:8px 0; padding:8px 14px; border:1px solid var(--line); border-radius:14px; background:var(--surface); color:var(--text); }
+.plan-row.is-current { border-color:transparent; background:#e7ecf3; }
+.plan-circle { flex:none; position:relative; width:26px; height:26px; padding:0; border:2px solid #cfcfcf; border-radius:50%; background:transparent; box-sizing:border-box; }
+.plan-row.is-current .plan-circle { border-color:var(--primary); }
+button.plan-circle:not(:disabled) { cursor:pointer; }
+button.plan-circle:not(:disabled):hover { background:var(--accent-soft); }
+.plan-copy { flex:1; min-width:0; display:grid; gap:3px; }
+.plan-copy strong { font-size:15px; font-weight:500; line-height:1.45; overflow-wrap:anywhere; }
+.plan-copy small { font-size:12px; color:var(--text-3); }
+.plan-time { flex:none; color:var(--muted); font-size:13px; white-space:nowrap; }
+.plan-time.is-edit { padding:5px 9px; border:1px solid var(--line-strong); border-radius:99px; background:var(--surface-subtle); color:var(--text-2); font:inherit; font-size:12px; cursor:pointer; }
+.plan-icon { flex:none; width:30px; height:30px; padding:0; border:1px solid var(--line); border-radius:9px; background:var(--surface); color:var(--text-3); font:inherit; font-size:12px; cursor:pointer; }
+.plan-icon[data-del]:hover { color:var(--danger); border-color:#ecc9cf; }
+.plan-row-input, .plan-add input { flex:1; min-width:0; padding:6px 0; border:0; border-bottom:1px dashed var(--line-strong); background:transparent; color:var(--text); font:inherit; font-size:15px; }
+.plan-row-input:focus, .plan-add input:focus { box-shadow:none !important; border-bottom-color:var(--primary) !important; }
+.plan-add { border-style:dashed; background:transparent; cursor:text; }
+.plan-add input { border-bottom:0; }
+.plan-plus { flex:none; width:26px; text-align:center; color:var(--muted); font-size:18px; }
+/* view screen: done → filled check + strike, current → lit + 当前, rest quiet grey */
+.plan-list .plan-row { border-color:transparent; background:transparent; margin:4px 0; }
+.plan-list .plan-row.is-current { background:#e7ecf3; box-shadow:none; padding:14px; }
+.plan-list .plan-row.is-current .plan-copy strong { font-weight:600; }
+.plan-list .plan-row.is-upcoming { color:#6b6b6b; }
+.plan-list .plan-row.is-done { color:var(--disabled); }
+.plan-list .plan-row.is-done .plan-copy strong { text-decoration:line-through; }
+.plan-list .plan-row.is-done .plan-circle { border-color:var(--primary); background:var(--primary); }
+.plan-list .plan-row.is-done .plan-circle::after { content:''; position:absolute; left:7px; top:3px; width:6px; height:11px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg); }
+.plan-list .plan-add { border:1px dashed var(--line-strong); }
+.plan-badge { flex:none; align-self:flex-start; padding:3px 12px; border-radius:99px; background:var(--primary); color:var(--on-primary); font-size:12px; font-weight:500; }
+.plan-note { display:none; }
+.plan-bottom { flex:none; display:grid; grid-template-columns:.8fr 1.2fr; gap:10px; padding:12px 20px max(18px,env(safe-area-inset-bottom)); border-top:1px solid var(--line-soft); background:var(--surface-subtle); }
+.plan-bottom.is-single { display:flex; justify-content:flex-end; }
+.plan-bottom button { min-height:50px; padding:0 12px; white-space:nowrap; border:1px solid var(--line-strong); border-radius:14px; background:var(--surface); color:var(--text-2); font:inherit; font-size:14px; cursor:pointer; }
+.plan-bottom .plan-begin { border-color:var(--primary); background:var(--primary); color:var(--on-primary); font-weight:600; }
+.plan-bottom .plan-begin:hover:not(:disabled) { background:#233f78; }
+.plan-bottom button:active:not(:disabled) { transform:translateY(1px); }
+.decomposition-screen button:disabled { opacity:.45; cursor:default; }
+@media(prefers-reduced-motion:reduce) { .plan-card-progress > i, .phone #todoGroups .task-row { transition:none; } }
+
+/* ---------- app-wide v5 pass: selection = 月白 + 深霁蓝, primary = 霁蓝, danger = 胭脂 ---------- */
+.phone .choice.active, .task-scenario-choice button.active, .phone .task-property-popover .choice.active, .phone .task-property-popover .project.active, .task-onboarding-choices button.active { border-color:var(--accent-line); background:var(--accent-soft); color:var(--accent-text); }
+.task-subtabs button.active, .task-kind-toggle button.active, .ws-view-rail button[aria-pressed=true] { background:var(--surface); color:var(--accent-text); border-color:var(--accent-line); }
+.phone .cal-day.selected { background:var(--primary); color:var(--on-primary); box-shadow:none; }
+.task-week-days button.is-today::after, .phone .task-week-days button.is-today::after { background:var(--primary); }
+.ws-map-node.is-selected { border-color:var(--primary); box-shadow:var(--ring-soft), var(--shadow); }
+.ws-map-node:hover { border-color:var(--line-active); }
+.phone .task-chat-form button[type="submit"], .task-chat-form button[type="submit"] { background:var(--primary); color:var(--on-primary); }
+.phone .task-chat-form input:focus { border-color:var(--accent-line); box-shadow:var(--ring-soft); }
+.phone .delete-confirm { background:var(--danger); border-color:var(--danger); color:#fff; }
+.phone .delete-cancel { background:var(--surface); border:1px solid var(--line-strong); color:var(--text-2); }
+.task-account-delete summary { color:var(--danger-text); }
+.phone .project.active { border-color:var(--accent-line); background:var(--accent-soft); color:var(--accent-text); }
+.phone a, .manage-history-more, .done-history-link { color:var(--accent-text); }
+
+/* ---------- Overview keeps the compact bar and scene fold; timeline lives in Manage All ---------- */
+.ws-overview .ws-bar, .ws-all .ws-bar { display:flex; align-items:center; gap:10px; margin:0 0 10px; }
+.ws-overview .ws-bar h1, .ws-all .ws-bar h1 { flex:1; margin:0; font-size:20px; font-weight:700; letter-spacing:-.4px; line-height:1.2; }
+.ws-month { display:flex; align-items:center; gap:2px; padding:2px; border:1px solid var(--line); border-radius:11px; background:var(--surface); }
+.ws-month button { width:28px; height:28px; border:0; border-radius:8px; background:transparent; color:var(--text-3); font-size:17px; cursor:pointer; }
+.ws-month button:hover { background:var(--accent-soft); color:var(--accent-text); }
+.ws-month span { min-width:58px; text-align:center; font-family:Georgia,"Songti SC",serif; font-size:14px; font-weight:700; color:var(--text); }
+.ws-add { width:36px; height:36px; border:0; border-radius:12px; background:var(--primary); color:var(--on-primary); font-size:19px; line-height:1; cursor:pointer; box-shadow:0 3px 10px rgba(42,75,141,.22); transition:transform .15s ease, box-shadow .15s ease, background-color .15s ease; }
+.ws-add:hover { background:#233f78; transform:translateY(-1px); box-shadow:0 6px 14px rgba(42,75,141,.28); }
+.ws-add:active { transform:translateY(0) scale(.95); }
+.ws-tools { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:0 0 14px; }
+.ws-tools input[type=search] { flex:1 1 140px; min-width:0; height:34px; padding:0 12px; border:1px solid var(--line); border-radius:11px; background:var(--surface); font:inherit; font-size:13px; color:var(--text); }
+.ws-all .ws-tools-row { display:flex; align-items:center; gap:8px; width:100%; min-width:0; }
+.ws-all .ws-tools-row input[type=search] { flex:1 1 auto; min-width:0; }
+.ws-all .ws-tools-row .ws-month { flex:none; }
+.ws-all .ws-chips { flex:1 1 100%; }
+@media (max-width:360px) {
+  .ws-all .ws-month { gap:0; padding:1px; }
+  .ws-all .ws-month button { width:26px; height:26px; }
+  .ws-all .ws-month span { min-width:48px; font-size:13px; }
+}
+.ws-chips { display:flex; gap:4px; flex:0 1 auto; overflow-x:auto; scrollbar-width:none; }
+.ws-chips::-webkit-scrollbar { display:none; }
+.ws-chips button { display:inline-flex; align-items:center; gap:5px; height:34px; padding:0 11px; border:1px solid var(--line); border-radius:11px; background:var(--surface); color:var(--text-3); font:inherit; font-size:12px; white-space:nowrap; cursor:pointer; }
+.ws-chips button b { font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums; }
+.ws-chips button[aria-pressed=true] { border-color:var(--accent-line); background:var(--accent-soft); color:var(--accent-text); font-weight:600; }
+.ws-chips button[aria-pressed=true] b { color:var(--accent-text); }
+#wsRoutineStatus:empty { display:none; }
+#wsRoutineStatus { margin:-6px 0 10px; font-size:12px; color:var(--danger-text); }
+.ws-overview .ws-timeline, .ws-all .ws-timeline { padding:0 0 30px; }
+
+
+.ws-tl { position:relative; margin:0; padding:0; list-style:none; }
+.ws-tl::before { content:''; position:absolute; left:55px; top:8px; bottom:8px; width:2px; border-radius:2px; background:var(--line); }
+.ws-tl-day { position:relative; display:grid; grid-template-columns:44px minmax(0,1fr); gap:24px; padding:0 0 18px; }
+.ws-tl-day::before { content:''; position:absolute; left:51px; top:10px; width:10px; height:10px; border-radius:50%; background:var(--surface); border:2px solid #c4c4c4; box-sizing:border-box; z-index:1; }
+.ws-tl-day.is-today::before { background:var(--primary); border-color:var(--primary); box-shadow:0 0 0 4px rgba(42,75,141,.14); }
+.ws-tl-day.is-future::before { border-style:dashed; }
+.ws-tl-date { display:grid; justify-items:end; align-content:start; gap:1px; padding-top:2px; }
+.ws-tl-date strong { font-family:Georgia,"Songti SC",serif; font-size:22px; font-weight:700; line-height:1.1; color:var(--text); }
+.ws-tl-date span { font-size:11px; color:var(--muted); }
+.ws-tl-day.is-today .ws-tl-date strong, .ws-tl-day.is-today .ws-tl-date span { color:var(--accent-text); }
+.ws-tl-day.is-future .ws-tl-date strong { color:var(--muted); }
+.ws-tl-events { display:grid; gap:8px; min-width:0; }
+.ws-tl-event { display:flex; align-items:center; gap:12px; width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:14px; background:var(--surface); color:var(--text); font:inherit; text-align:left; cursor:pointer; transition:border-color .15s ease, box-shadow .15s ease; }
+.ws-tl-event:hover { border-color:var(--line-strong); box-shadow:var(--shadow); }
+.ws-tl-icon { flex:none; display:grid; place-items:center; width:28px; height:28px; border-radius:9px; background:var(--selected); color:var(--text-3); font-size:13px; }
+.ws-tl-event.is-complete .ws-tl-icon { background:var(--primary); color:var(--on-primary); }
+.ws-tl-event.is-idea .ws-tl-icon { background:var(--accent-soft); color:var(--accent-text); }
+.ws-tl-event.is-deadline { border-style:dashed; }
+.ws-tl-event.is-deadline .ws-tl-copy small { color:var(--danger-text); }
+.ws-tl-copy { display:grid; gap:3px; min-width:0; }
+.ws-tl-copy strong { font-size:14px; font-weight:500; line-height:1.45; overflow-wrap:anywhere; }
+.ws-tl-copy small { font-size:11px; color:var(--muted); }
+.ws-timeline-empty { display:grid; gap:8px; padding:44px 16px; border:1px dashed var(--line-strong); border-radius:18px; text-align:center; }
+.ws-timeline-empty strong { font-size:15px; font-weight:600; }
+.ws-timeline-empty span { font-size:12px; color:var(--muted); line-height:1.7; }
+@media (max-width:420px) {
+  .ws-tl::before { left:47px; } .ws-tl-day { grid-template-columns:38px minmax(0,1fr); gap:20px; } .ws-tl-day::before { left:43px; }
+}
+
+/* ---------- Manage: same compact bar as Overview ---------- */
+#wsManage { margin:0 0 12px; }
+#wsManage .ws-bar { display:flex; align-items:center; gap:10px; margin:0 0 10px; }
+#wsManage .ws-bar h1 { flex:1; margin:0; font-size:20px; font-weight:700; letter-spacing:-.4px; line-height:1.2; }
+#wsManage .ws-manage-tabs { display:flex; grid-template-columns:none; margin:0; padding:0; gap:4px; background:transparent; border-radius:0; }
+#wsManage .ws-manage-tabs button { flex:1 1 0; min-height:34px; height:34px; padding:0 8px; border:1px solid var(--line); border-radius:11px; background:var(--surface); color:var(--text-3); font-size:12px; box-shadow:none; }
+#wsManage .ws-manage-tabs button[aria-current=page] { border-color:var(--accent-line); background:var(--accent-soft); color:var(--accent-text); font-weight:600; }
+/* each section's own header, intro and sub-tabs repeat the bar above */
+.phone #todoScreen > .work-head, .phone #doneScreen > .work-head, .phone #ideaScreen > .work-head, .phone #routineScreen > .work-head,
+.phone #todoScreen > .tabs, .phone #doneScreen > .done-intro, .phone #doneScreen > .done-tabs, .phone #routineScreen > .module-lead,
+.phone #ideaScreen .ideas-intro, .phone #routineScreen .task-panel > h3 { display:none; }
+.phone #routineScreen .task-panel, .phone #todayScreen .task-panel { margin-top:0; padding-top:0; border-top:0; }
+.phone #todoScreen .filters, .phone #doneScreen .filters { margin:0 0 8px; padding:0; min-height:0; }
+.phone .filter-trigger { min-height:30px; height:30px; padding:0 11px; border:1px solid var(--line); border-radius:10px; background:var(--surface); font-size:12px; color:var(--text-3); }
+.phone .manage-date-title, .phone .group-title.manage-date-title { display:flex; align-items:baseline; gap:6px; margin:14px 0 6px; padding:0; border:0; font-size:12px; font-weight:600; color:var(--text-3); letter-spacing:0; }
+.phone .manage-date-title small { font-size:11px; font-weight:400; color:var(--muted); }
+.phone #todoGroups .task-row.swipe-item, .phone #doneList .done-row.swipe-item { margin:6px 0; }
+.phone #todoGroups .task-row .swipe-content, .phone #doneList .done-row .swipe-content { min-height:58px; padding:12px 14px; }
+.phone #routineScreen .task-routine-progress { margin:0 0 10px; }
+.phone .checklist-list { gap:8px; margin-top:0; }
+.phone .checklist-card { padding:12px 12px 12px 14px; }
+.phone .checklist-new { min-height:42px; margin-top:8px; }
+.phone #ideaScreen .idea-input { margin:0 0 10px; }
+
+/* ---------- Today: compact title, tight week strip, inline stats ---------- */
+.phone #todayScreen .cal-header { margin:0 0 8px; padding:0; }
+.phone #todayScreen .cal-header .work-head { margin:0; min-height:0; }
+.phone #todayScreen .cal-header .eyebrow, .phone #todayScreen .cal-header > p, .phone #todayScreen .cal-selected { display:none; }
+.phone #todayScreen .cal-header h1 { margin:0; font-size:20px; font-weight:700; letter-spacing:-.4px; line-height:1.2; }
+.phone .task-date-heading { min-height:30px; margin-bottom:4px; }
+.phone .task-month-entry > span { font-size:13px; font-weight:600; color:var(--text-2); }
+.phone .task-date-heading > button { min-height:28px; padding:0 10px; border:1px solid var(--accent-line); border-radius:9px; background:var(--accent-soft); color:var(--accent-text); font-size:12px; }
+.phone .task-week-days button { min-height:40px; padding:3px 0 6px; border:1px solid transparent; border-radius:10px; }
+.phone .task-week-days button > span { font-size:10px; color:var(--muted); }
+.phone .task-week-days button > strong { font-size:14px; }
+.phone .task-week-days button.is-selected { border-color:var(--primary); background:var(--primary); color:var(--on-primary); }
+.phone .task-week-days button.is-selected > span { color:rgba(255,255,255,.75); }
+.phone .task-week-days button.is-selected.is-today::after { background:#fff; }
+.ws-day-stats { display:flex; gap:6px; margin:10px 0 12px; }
+.ws-day-stats > div { flex:1 1 0; display:flex; align-items:baseline; justify-content:center; gap:5px; padding:8px 6px; border:1px solid var(--line); border-radius:11px; background:var(--surface); font-size:11px; color:var(--muted); white-space:nowrap; }
+.ws-day-stats strong { display:inline; margin:0; font-family:Georgia,"Songti SC",serif; font-size:17px; font-weight:700; color:var(--text); }
+.phone #todayScreen .task-panel > h3 { margin:6px 0 8px; font-size:13px; font-weight:600; color:var(--text-3); }
+
+/* ---------- step editing: free time input + drag handle on the right ---------- */
+.plan-time-input { flex:none; width:84px; height:30px; padding:0 8px; border:1px solid var(--line-strong); border-radius:99px; background:var(--surface-subtle); color:var(--text-2); font:inherit; font-size:12px; text-align:center; }
+.plan-drag { flex:none; width:26px; height:36px; margin-right:-6px; padding:0; border:0; border-radius:8px; background:transparent; color:var(--disabled); font-size:14px; letter-spacing:-3px; cursor:grab; touch-action:none; user-select:none; }
+.plan-drag:hover, .plan-drag:focus-visible { color:var(--accent-text); background:var(--accent-soft); }
+.plan-row.is-dragging { position:relative; z-index:2; border-color:var(--accent-line); background:var(--surface); box-shadow:0 8px 24px rgba(0,0,0,.10); opacity:.96; }
+.plan-row.is-dragging .plan-drag { cursor:grabbing; color:var(--accent-text); }
+.plan-list .plan-stage h2 { margin:18px 0 6px; }
+.plan-list .plan-stage:first-child h2 { margin-top:4px; }
+@media (max-width:380px) { .plan-time-input { width:70px; } .plan-icon { width:26px; } }
+
+/* ---------- To-do: deadline line on every card (decomposed ones too) ---------- */
+.phone #todoGroups .meta span:last-child { display:none; }
+.task-due { display:inline-flex; align-items:center; gap:4px; width:max-content; margin:4px 0 2px; padding:2px 8px; border-radius:99px; background:var(--accent-soft); color:var(--accent-text); font-size:11px; line-height:1.6; }
+.task-due.is-overdue { background:var(--danger-soft); color:var(--danger-text); }
+.phone #todoGroups .task-main { display:flex; flex-direction:column; align-items:flex-start; }
+.phone #todoGroups .has-task-plan .task-due { margin:4px 0 0; }
+
+/* ---------- Ideas: idea cards ---------- */
+.phone #ideaList .idea-row.idea-card { margin:8px 0; padding:0; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
+.phone #ideaList .idea-card .swipe-content { display:flex; flex-direction:column; align-items:stretch; gap:10px; padding:14px 16px 12px; border-radius:15px; }
+.phone #ideaList .idea-card .idea-text { font-size:15px; line-height:1.6; color:var(--text); overflow-wrap:anywhere; white-space:pre-wrap; }
+.phone #ideaList .idea-card .idea-text::before { content:'◇'; margin-right:8px; color:var(--accent-text); }
+.idea-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.idea-time { font-size:11px; color:var(--muted); }
+.phone #ideaList .idea-card .idea-to-task { height:28px; padding:0 12px; border:1px solid var(--accent-line); border-radius:99px; background:var(--accent-soft); color:var(--accent-text); font-size:12px; font-weight:500; cursor:pointer; }
+.phone #ideaList .idea-card .idea-to-task:hover { background:var(--primary); border-color:var(--primary); color:var(--on-primary); }
+@media(hover:hover) { .phone #ideaList .idea-card:hover { border-color:var(--line-strong); box-shadow:var(--shadow); } }
+
+/* ================= Unified task card =================
+   Every card in the app (To-do, Done, Idea, Checklist, timeline) shares:
+   16px radius · 1px line · white · 12/14 padding · [check slot] [title 15/500 + meta 11 muted].
+   Check slot = completion only (empty ring / filled ring with check). Type = outline icon chip, never a check. */
+:root { --card-radius:16px; --card-pad:12px 14px; }
+.phone #todoGroups .task-row.swipe-item, .phone #doneList .done-row.swipe-item, .phone #ideaList .idea-row.idea-card,
+.checklist-card, .ws-tl-event { border:1px solid var(--line); border-radius:var(--card-radius); background:var(--surface); }
+.phone #todoGroups .task-row .swipe-content, .phone #doneList .done-row .swipe-content, .phone #ideaList .idea-card .swipe-content,
+.checklist-card { padding:var(--card-pad); border-radius:calc(var(--card-radius) - 1px); gap:12px; min-height:58px; }
+.phone #todoGroups .task-title, .phone #doneList .done-copy strong, .phone #ideaList .idea-card .idea-text, .checklist-card-copy strong, .ws-tl-open strong { font-size:15px; font-weight:500; line-height:1.5; color:var(--text); }
+.phone #todoGroups .meta, .phone #doneList .done-copy small, .idea-time, .checklist-card-copy small, .ws-tl-open small { font-size:11px; color:var(--muted); }
+
+/* check slot */
+.tcheck, .phone #todoGroups .check { position:relative; flex:none; width:22px; height:22px; margin:0; padding:0; border:1.6px solid #c9c9c9; border-radius:50%; background:var(--surface); font-size:0; color:transparent; box-sizing:border-box; cursor:pointer; }
+.phone #todoGroups .check { align-self:center; }
+.tcheck:hover, .phone #todoGroups .check:hover { border-color:var(--primary); background:var(--accent-soft); }
+.tcheck.is-done, .phone #doneList .done-row .swipe-content::before { border-color:var(--primary); background:var(--primary); cursor:default; }
+.tcheck.is-done::after, .phone #doneList .done-row .swipe-content::after { content:''; position:absolute; left:6.5px; top:3px; width:5px; height:10px; border:solid #fff; border-width:0 1.8px 1.8px 0; transform:rotate(45deg); }
+.tcheck.is-none { visibility:hidden; cursor:default; }
+.phone #doneList .done-row .swipe-content { position:relative; padding-left:48px; }
+.phone #doneList .done-row .swipe-content::before { content:''; position:absolute; left:14px; top:50%; width:22px; height:22px; margin-top:-11px; border:1.6px solid var(--primary); border-radius:50%; box-sizing:border-box; }
+.phone #doneList .done-row .swipe-content::after { left:21.5px; top:50%; margin-top:-8px; }
+.phone #doneList .done-copy strong { color:var(--text-3); }
+
+/* kind chip: outline icon + word; shape tells the type, colour stays quiet */
+.tkind { display:inline-flex; align-items:center; gap:4px; flex:none; height:20px; padding:0 7px 0 5px; border-radius:6px; font-size:11px; font-weight:500; line-height:1; white-space:nowrap; }
+.tkind svg { width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.tkind svg circle { fill:currentColor; stroke:none; }
+.tkind.is-task { background:var(--accent-soft); color:var(--accent-text); }
+.tkind.is-idea { background:#f4f1ea; color:#6b5d3e; }
+.tkind.is-routine { background:var(--selected); color:var(--text-3); }
+
+/* timeline card */
+.ws-tl-event { display:flex; align-items:center; gap:12px; padding:var(--card-pad); cursor:default; }
+.ws-tl-event:hover { border-color:var(--line-strong); box-shadow:var(--shadow); }
+.ws-tl-open { flex:1; min-width:0; display:grid; gap:5px; padding:0; border:0; background:transparent; font:inherit; text-align:left; color:inherit; cursor:pointer; }
+.ws-tl-open strong { overflow-wrap:anywhere; }
+.ws-tl-open small { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.ws-tl-event.is-complete .ws-tl-open strong { color:var(--text-3); }
+.ws-tl-event.is-deadline { border-style:dashed; }
+.ws-tl-event.is-deadline .ws-tl-open small > span:last-child { color:var(--danger-text); }
+.ws-tl-icon { display:none; }
+
+/* idea + checklist cards use the chip instead of glyphs */
+.phone #ideaList .idea-card .idea-text::before { content:none; }
+.idea-time { display:inline-flex; align-items:center; gap:8px; }
+.checklist-card .tkind { align-self:center; }
+
+/* type = quiet outline icon at the card's right edge (no box, no word) */
+.tkind-icon { flex:none; display:grid; place-items:center; width:20px; height:20px; margin-left:auto; }
+.tkind-icon svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.tkind-icon svg circle { fill:currentColor; stroke:none; }
+.tkind-icon.is-task { color:#7d93c0; }
+.tkind-icon.is-idea { color:#b39a62; }
+.tkind-icon.is-routine { color:#a3a3a3; }
+.ws-tl-open small { display:block; }
+.checklist-card .tkind-icon { margin-left:0; }
+.idea-time:empty { visibility:hidden; }
+
+/* ================= Today: Today → date → stats → 今日回顾 (AI · 日记 · 清单) → 完成任务 / 灵感 ================= */
+.phone #todayScreen:not(.hidden) { display:flex; flex-direction:column; }
+.phone #todayScreen > * { flex-shrink:0; }
+.phone #todayScreen > .cal-header { order:1; }
+.phone #todayScreen > #taskTodayDate { order:2; }
+.phone #todayScreen > #wsTodayGlance { order:3; }
+.phone #todayScreen > #taskReport { order:4; }
+.phone #todayScreen > #calRecords { order:5; }
+.phone #todayScreen > * { order:6; }
+.phone #todayScreen > .cal-header, .phone #todayScreen > #taskTodayDate, .phone #todayScreen > #wsTodayGlance, .phone #todayScreen > #taskReport, .phone #todayScreen > #calRecords { flex-shrink:0; }
+
+/* stats: three quiet tiles, numbers in 霁蓝 */
+.ws-day-stats > div { background:var(--surface); border-color:var(--line); }
+.ws-day-stats strong { color:var(--accent-text); }
+
+/* 今日回顾 panel */
+.phone #todayScreen #taskReport { margin:4px 0 6px; padding:0; border:0; border-radius:0; background:transparent; }
+.phone #todayScreen #taskReport > h3 { position:absolute; width:1px; height:1px; margin:0; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.task-report-narrative { margin:0 0 4px; padding:14px 14px 12px; border:1px solid var(--accent-line); border-radius:14px; background:linear-gradient(180deg,#f2f5fb 0%,#fbfcfe 100%); }
+.task-report-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.task-report-head > span { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:600; letter-spacing:.04em; color:var(--accent-text); }
+.task-report-head > span::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--primary); box-shadow:0 0 0 3px rgba(42,75,141,.12); }
+.task-report-refresh { height:26px; padding:0 10px; border:1px solid var(--accent-line); border-radius:99px; background:var(--surface); color:var(--accent-text); font:inherit; font-size:11px; cursor:pointer; }
+.task-report-refresh:hover { background:var(--accent-soft); }
+.task-report-narrative p { margin:0; font-size:14px; line-height:1.85; color:var(--text-2); white-space:pre-wrap; }
+.phone #todayScreen .task-section-heading { display:flex; align-items:baseline; justify-content:space-between; margin:18px 0 8px; padding:0; border:0; }
+.phone #todayScreen .task-section-heading h3 { margin:0; font-size:12px; font-weight:600; color:var(--text-3); }
+.phone #todayScreen .task-section-heading span { font-size:11px; color:var(--muted); }
+.phone #todayScreen #taskDiary { width:100%; min-height:88px; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:var(--surface-subtle); color:var(--text); font:inherit; font-size:14px; line-height:1.7; resize:vertical; box-sizing:border-box; }
+.phone #todayScreen #taskDiary:focus { background:var(--surface); }
+.phone #todayScreen .task-editor-actions { display:flex; justify-content:flex-end; gap:8px; margin:8px 0 0; }
+.phone #todayScreen #taskDiarySave { height:34px; padding:0 16px; border:1px solid var(--primary); border-radius:10px; background:var(--primary); color:var(--on-primary); font-size:13px; font-weight:600; }
+.phone #todayScreen #taskDiarySave:hover { background:#233f78; }
+.phone #todayScreen .ws-routine-summary { display:flex; align-items:center; gap:10px; margin:6px 0 0; padding:10px 12px; border:1px solid var(--line-soft); border-radius:12px; background:var(--surface-subtle); font-size:14px; color:var(--text-2); }
+.phone #todayScreen .task-muted { margin:4px 0 0; font-size:12px; color:var(--muted); }
+
+/* finished tasks & ideas below: unified cards */
+.phone #calRecords { margin-top:8px; }
+.phone #calRecords .cal-record-group { margin:14px 0 0; padding:0; border:0; background:transparent; }
+.phone #calRecords .cal-record-label { margin:0 0 8px; font-size:12px; font-weight:600; color:var(--text-3); }
+.phone #calRecords .cal-record-row { display:flex; align-items:center; gap:12px; margin:6px 0; padding:12px 14px; border:1px solid var(--line); border-radius:var(--card-radius,16px); background:var(--surface); }
+.phone #calRecords .cal-record-copy strong { font-size:15px; font-weight:500; color:var(--text); }
+.phone #calRecords .cal-record-copy small { display:block; margin-top:2px; font-size:11px; color:var(--muted); }
+.phone #calRecords .cal-record-mark { flex:none; display:grid; place-items:center; width:22px; height:22px; color:var(--muted); }
+.phone #calRecords .cal-record-mark .tkind-icon { margin:0; }
+.phone #calRecords .cal-empty { padding:14px; border:1px dashed var(--line-strong); border-radius:14px; font-size:12px; color:var(--muted); text-align:center; }
+.ws-tl-event.is-deadline .ws-tl-open small > span:last-child { color:inherit; }
+.ws-tl-due { color:var(--danger-text); font-weight:500; }
+
+.phone #overviewScreen { position:relative; }
+
+/* ---------- Timeline: flat rows with a time column, gaps between neighbours (no card frame) ---------- */
+.ws-tl-events { gap:0; }
+.ws-tl-event { gap:10px; padding:9px 0; border:0; border-radius:0; background:transparent; box-shadow:none; }
+.ws-tl-event:hover { border-color:transparent; box-shadow:none; }
+.ws-tl-event.is-deadline { border-style:solid; }
+.ws-tl-time { flex:none; width:40px; font-size:12px; font-variant-numeric:tabular-nums; color:var(--muted); text-align:left; }
+.ws-tl-time:empty::before { content:'—'; color:var(--disabled); }
+.ws-tl-event.is-complete .ws-tl-time { color:var(--disabled); }
+.ws-tl-event.is-deadline .ws-tl-time { color:var(--danger-text); }
+.ws-tl-gap { display:flex; align-items:center; gap:10px; min-height:22px; }
+.ws-tl-gap i { flex:none; width:40px; height:100%; min-height:22px; background:linear-gradient(var(--line-strong) 50%,transparent 50%) 7px 0/1.5px 6px repeat-y; }
+.ws-tl-gap span { font-size:11px; color:var(--muted); }
+@media(max-width:360px) { .ws-tl-time { width:36px; } .ws-tl-gap i { width:36px; } }
+
+.phone #todoGroups .task-important-toggle,.phone #doneList .task-important-toggle{position:absolute;top:3px;right:4px;width:28px;height:28px;padding:0;border:0;background:transparent;color:var(--muted);font-size:18px;z-index:2}
+.phone #todoGroups .task-important-toggle[aria-pressed=true],.phone #doneList .task-important-toggle[aria-pressed=true]{color:var(--accent-text)}
+#todoSheet .decompose-preview .plan-scroll{padding:12px 0;overflow:visible}
+#todoSheet .decompose-preview .plan-bottom{padding:8px 0;background:transparent}
+#todoSheet .decompose-preview .plan-head{margin-bottom:10px}
+#todoSheet .decompose-preview .plan-scroll>h1{font-size:20px}
+
+/* Daily Recap (2026-11-21): AI recap card, a note to yourself, and one list card per group */
+.phone #todayScreen .task-diary-heading { margin:22px 0 8px; }
+.phone #todayScreen .task-diary-heading h3 { font:600 15px/1.4 Georgia,"Songti SC",serif; color:var(--text); }
+.phone #todayScreen #taskDiary { width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:16px; background:var(--surface); font:inherit; font-size:14px; line-height:1.7; color:var(--text); resize:vertical; }
+.phone #todayScreen #taskDiary:focus { outline:none; border-color:var(--accent-line); box-shadow:var(--ring-soft); }
+.phone #todayScreen .task-editor-actions { margin-top:10px; }
+.phone #todayScreen .task-editor-actions .task-primary { border:0; border-radius:14px; background:var(--primary); color:var(--on-primary); font-weight:600; }
+
+.phone #calRecords .cal-record-group { margin:22px 0 0; padding:0; border:1px solid var(--line); border-radius:20px; background:var(--surface); overflow:hidden; }
+.phone #calRecords .cal-record-label { display:flex; align-items:center; justify-content:space-between; margin:0; padding:13px 16px 11px; border-bottom:1px solid var(--line-soft); font:600 15px/1.4 Georgia,"Songti SC",serif; color:var(--text); }
+.phone #calRecords .cal-record-label em { min-width:24px; padding:1px 8px; border-radius:99px; background:var(--selected); font:600 12px/1.6 sans-serif; font-style:normal; text-align:center; color:var(--accent-text); }
+.phone #calRecords .cal-record-row { gap:12px; margin:0; padding:12px 16px; border:0; border-top:1px solid var(--line-soft); border-radius:0; background:transparent; }
+.phone #calRecords .cal-record-label + .cal-record-row { border-top:0; }
+.phone #calRecords .cal-record-copy { min-width:0; }
+.phone #calRecords .cal-record-copy strong { display:block; font-size:14.5px; line-height:1.5; overflow-wrap:anywhere; }
+.phone #calRecords .cal-record-copy small { margin-top:1px; font-size:12px; }
+.phone #calRecords .cal-empty { margin:0; padding:16px; border:0; border-radius:0; text-align:left; font-size:13px; }
+
+/* AI 回顾 (2026-11-21): one solid lime card is the focal point of Daily Recap. A faint loop ring echoes the UpLoop name. */
+.phone #todayScreen .task-report-narrative { position:relative; overflow:hidden; display:flex; flex-direction:column; margin:0 0 4px; padding:16px 20px 18px; border:0; border-radius:28px; background:var(--primary); color:var(--on-primary); white-space:normal; box-shadow:0 14px 30px rgba(135,171,32,.26); }
+.phone #todayScreen .rn-loop { position:absolute; right:-64px; top:-78px; width:230px; height:230px; border:26px solid rgba(255,255,255,.28); border-radius:50%; pointer-events:none; }
+.phone #todayScreen .rn-loop::after { content:""; position:absolute; inset:28px; border:2px solid rgba(30,42,18,.12); border-radius:50%; }
+.phone #todayScreen .task-report-head { position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; margin:0; }
+.phone #todayScreen .rn-tag { display:flex; align-items:center; gap:10px; min-width:0; }
+.phone #todayScreen .rn-tag time { font-size:13px; font-weight:600; color:var(--text-2); white-space:nowrap; }
+.phone #todayScreen .rn-tag > span { display:inline-flex; align-items:center; gap:7px; padding:5px 12px 5px 10px; border-radius:99px; background:rgba(255,255,255,.55); font-size:12px; font-weight:700; letter-spacing:.02em; color:var(--on-primary); }
+.phone #todayScreen .rn-tag > span::before { content:""; width:7px; height:7px; border-radius:50%; background:var(--on-primary); box-shadow:none; }
+.phone #todayScreen .task-report-refresh { display:grid; place-items:center; width:34px; height:34px; padding:0; border:0; border-radius:50%; background:rgba(30,42,18,.1); color:var(--on-primary); cursor:pointer; transition:background-color .15s ease, transform .3s ease; }
+.phone #todayScreen .task-report-refresh svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.phone #todayScreen .task-report-refresh:hover { background:rgba(30,42,18,.18); }
+.phone #todayScreen .task-report-refresh:active { transform:rotate(-90deg); }
+.phone #todayScreen .task-report-refresh:focus-visible { outline:2px solid var(--on-primary); outline-offset:2px; }
+.phone #todayScreen .rn-lead { position:relative; z-index:1; margin:14px 0 0; max-width:14em; font:700 24px/1.4 Georgia,"Songti SC","Noto Serif SC",serif; letter-spacing:-.02em; text-wrap:balance; color:var(--on-primary); overflow-wrap:anywhere; }
+.phone #todayScreen .rn-rest { position:relative; z-index:1; margin:12px 0 0; padding-top:10px; border-top:1px solid rgba(30,42,18,.16); color:var(--text); overflow-wrap:anywhere; }
+.phone #todayScreen .rn-rest p { margin:0 0 2px; text-wrap:pretty; font-size:14.5px; line-height:1.6; }
+.phone #todayScreen .rn-rest p:last-child { margin-bottom:0; }
+.phone #todayScreen .rn-rest .rn-cheer { font-weight:700; }
+.phone #todayScreen .rn-lead mark, .phone #todayScreen .rn-rest mark { padding:1px 5px; border-radius:6px; background:rgba(255,255,255,.55); color:inherit; font-weight:700; }
+@media(max-width:360px) { .phone #todayScreen .rn-lead { font-size:21px; } }
+
+/* Done sheet: the native date input is invisible but still opens the picker via showPicker() */
+#eventSheet .datetime-row { position:relative; }
+#eventSheet .native-date { position:absolute; left:0; bottom:0; width:100%; height:0; padding:0; border:0; opacity:0; pointer-events:none; }

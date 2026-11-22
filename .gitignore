@@ -1,0 +1,27 @@
+# Dependencies and build output
+node_modules/
+dist/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+!deploy/.env.example
+
+# Local databases and runtime data
+data/
+*.sqlite
+*.sqlite-*
+*.sqlite-journal
+
+# Logs and OS junk
+*.log
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+desktop.ini
